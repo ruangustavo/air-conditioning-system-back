@@ -21,7 +21,7 @@ model AirConditioner {
   brand String
   model String
 
-  Room   Room? @relation(fields: [roomId], references: [id])
+  room   Room? @relation(fields: [roomId], references: [id])
   roomId Int?
 
   @@map("air_conditioners")

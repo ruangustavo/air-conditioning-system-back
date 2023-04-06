@@ -1,15 +1,17 @@
 import express from "express";
 import { RoomController } from "../controllers/roomController";
 
-export const roomRouter = express.Router();
+const router = express.Router();
 
-roomRouter
+router
   .route("/rooms")
   .get(RoomController.getAllRooms)
   .post(RoomController.addRoom);
 
-roomRouter
+router
   .route("/rooms/:id")
   .get(RoomController.getRoom)
   .put(RoomController.updateRoom)
   .delete(RoomController.deleteRoom);
+
+export default router;

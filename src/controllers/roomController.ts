@@ -7,21 +7,7 @@ export class RoomController {
     res.status(200).json(rooms);
   }
 
-  static async getRoomById(req: Request, res: Response) {
-    const roomId = Number(req.params.roomId);
-    const rooms = await prisma.room.findUnique({ where: { id: roomId } });
-    res.status(200).json(rooms);
-  }
-
-  static async getAirConditionersForRoom(req: Request, res: Response) {
-    const roomId = Number(req.params.roomId);
-    const airConditioners = await prisma.airConditioner.findMany({
-      where: { roomId: roomId },
-    });
-    res.status(200).json(airConditioners);
-  }
-
-  static async createRoom(req: Request, res: Response) {
+  static async addRoom(req: Request, res: Response) {
     const { name, number } = req.body;
     const room = await prisma.room.create({
       data: { name: name, number: number },
@@ -29,14 +15,20 @@ export class RoomController {
     res.status(201).json(room);
   }
 
-  static async deleteRoomById(req: Request, res: Response) {
-    const roomId = Number(req.params.roomId);
+  static async getRoom(req: Request, res: Response) {
+    const roomId = Number(req.params.id);
+    const rooms = await prisma.room.findUnique({ where: { id: roomId } });
+    res.status(200).json(rooms);
+  }
+
+  static async deleteRoom(req: Request, res: Response) {
+    const roomId = Number(req.params.id);
     await prisma.room.delete({ where: { id: roomId } });
     res.status(204);
   }
 
-  static async updateRoomById(req: Request, res: Response) {
-    const roomId = Number(req.params.roomId);
+  static async updateRoom(req: Request, res: Response) {
+    const roomId = Number(req.params.id);
     await prisma.room.update({
       where: { id: roomId },
       data: { ...req.body },

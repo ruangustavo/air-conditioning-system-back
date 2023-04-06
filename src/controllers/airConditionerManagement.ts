@@ -2,9 +2,9 @@ import { prisma } from "../db";
 import { Request, Response } from "express";
 
 export class AirConditionerManagementController {
-  static getAllAirConditioners(req: Request, res: Response) {
+  static async getAllAirConditioners(req: Request, res: Response) {
     const roomId = Number(req.params.roomId);
-    const airConditioners = prisma.airConditioner.findMany({
+    const airConditioners = await prisma.airConditioner.findMany({
       where: {
         roomId: roomId,
       },
@@ -12,9 +12,9 @@ export class AirConditionerManagementController {
     res.status(200).json(airConditioners);
   }
 
-  static addAirConditioner(req: Request, res: Response) {
+  static async addAirConditioner(req: Request, res: Response) {
     const roomId = Number(req.params.roomId);
-    const airConditioner = prisma.airConditioner.create({
+    const airConditioner = await prisma.airConditioner.create({
       data: {
         roomId: roomId,
         ...req.body,

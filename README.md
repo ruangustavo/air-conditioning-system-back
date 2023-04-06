@@ -19,7 +19,7 @@ Na escola IFRN, gerenciar e desligar os aparelhos de ar-condicionado é uma tare
 
 - **Express.js:** Um framework de aplicação web minimalista e flexível para Node.js, usado na criação de APIs RESTful que servem como back-end para o sistema de controle de ar-condicionado.
 
-- **MongoDB:** Um banco de dados NoSQL orientado a documentos, utilizado para armazenar e gerenciar informações dos aparelhos de ar-condicionado e usuários.
+- **PostgresSQL:** Um banco de dados SQL, utilizado para armazenar e gerenciar informações dos aparelhos de ar-condicionado e usuários.
 
 ## Funcionalidades
 

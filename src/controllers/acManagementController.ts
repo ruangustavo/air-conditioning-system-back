@@ -1,103 +1,88 @@
 import { appMqttClient } from "../mqtt/client";
-import { prisma } from "../db";
 import { Request, Response } from "express";
+import { airConditionerService } from "../services/airConditionerService";
 
 export class AirConditionerManagementController {
-  static async getAllAirConditioners(req: Request, res: Response) {
+  static async getAllAirConditioners(
+    req: Request,
+    res: Response
+  ): Promise<void> {
     const roomId = Number(req.params.roomId);
-    const airConditioners = await prisma.airConditioner.findMany({
-      where: {
-        roomId: roomId,
-      },
-    });
+    const airConditioners = await airConditionerService.getAirConditionerById(
+      roomId
+    );
     res.status(200).json(airConditioners);
   }
 
-  static async addAirConditioner(req: Request, res: Response) {
+  static async addAirConditioner(req: Request, res: Response): Promise<void> {
     const roomId = Number(req.params.roomId);
-    const airConditioner = await prisma.airConditioner.create({
-      data: {
-        roomId: roomId,
-        ...req.body,
-      },
-    });
+    const airConditioner = await airConditionerService.addAirConditioner(
+      roomId,
+      req.body
+    );
     res.status(201).json(airConditioner);
   }
 
-  static async getAirConditioner(req: Request, res: Response) {
-    const id = Number(req.params.id);
-    const airConditioner = await prisma.airConditioner.findUnique({
-      where: {
-        id: id,
-      },
-      include: {
-        room: true,
-      },
-    });
-
+  static async getAirConditioner(req: Request, res: Response): Promise<void> {
     const roomId = Number(req.params.roomId);
-    if (airConditioner?.roomId !== roomId) {
+    const airConditioners =
+      await airConditionerService.getAirConditionerByRoomId(roomId);
+
+    if (airConditioners.length === 0) {
       res.status(404).json({ message: "Air conditioner not found" });
-    } else {
-      res.status(200).json(airConditioner);
     }
+
+    res.status(200).json(airConditioners);
   }
 
-  static async updateAirConditioner(req: Request, res: Response) {
+  static async updateAirConditioner(
+    req: Request,
+    res: Response
+  ): Promise<void> {
     const id = Number(req.params.id);
-    const airConditioner = await prisma.airConditioner.update({
-      where: {
-        id: id,
-      },
-      data: {
-        ...req.body,
-      },
-    });
+    const airConditioner = await airConditionerService.updateAirConditioner(
+      id,
+      req.body
+    );
     res.status(200).json(airConditioner);
   }
 
-  static async deleteAirConditioner(req: Request, res: Response) {
+  static async deleteAirConditioner(
+    req: Request,
+    res: Response
+  ): Promise<void> {
     const id = Number(req.params.id);
-    await prisma.airConditioner.delete({
-      where: {
-        id: id,
-      },
-    });
-    res.status(201);
+    await airConditionerService.deleteAirConditioner(id);
+    res.status(204);
   }
 
-  static async getAirConditionerState(req: Request, res: Response) {
+  static async getAirConditionerState(
+    req: Request,
+    res: Response
+  ): Promise<void> {
     const id = Number(req.params.id);
-    const airConditioner = await prisma.airConditioner.findUnique({
-      where: {
-        id: id,
-      },
-    });
-    res.status(200).json({ toggled: airConditioner?.toggled });
+    const airConditionerState =
+      await airConditionerService.getAirConditionerState(id);
+    res.status(200).json({ toggled: airConditionerState });
   }
 
-  static async updateAirConditionerState(req: Request, res: Response) {
+  static async updateAirConditionerState(
+    req: Request,
+    res: Response
+  ): Promise<void> {
     const id = Number(req.params.id);
-    const airConditioner = await prisma.airConditioner.findUnique({
-      where: { id: id },
-    });
+    const airConditioner = await airConditionerService.getAirConditionerById(
+      id
+    );
 
-    if (!airConditioner) {
+    if (airConditioner === null) {
       res.status(404).json({ message: "Air conditioner not found" });
     }
 
-    const newStatus = !airConditioner?.toggled;
+    const newState = !airConditioner?.toggled;
+    await airConditionerService.updateAirConditionerState(id, newState);
 
-    const updatedAirConditioner = await prisma.airConditioner.update({
-      where: {
-        id: id,
-      },
-      data: {
-        toggled: newStatus,
-      },
-    });
-
-    const topic = appMqttClient.getTopic(updatedAirConditioner);
-    appMqttClient.publish(topic, newStatus ? "1" : "0");
+    const topic = appMqttClient.getTopic(airConditioner!);
+    appMqttClient.publish(topic, newState ? "1" : "0");
   }
 }

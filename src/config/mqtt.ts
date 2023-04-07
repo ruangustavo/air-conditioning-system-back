@@ -4,8 +4,8 @@ import { onConnect, onMessage } from "./callbacks";
 
 const MQTT_HOST = process.env.MQTT_HOST || "mqtt://broker.hivemq.com";
 
-export class AppMqttClient {
-  readonly client: mqtt.MqttClient;
+class AppMqttClient {
+  private readonly client: mqtt.MqttClient;
 
   constructor() {
     this.client = mqtt.connect(MQTT_HOST);
@@ -25,4 +25,11 @@ export class AppMqttClient {
       this.client.subscribe(topic);
     });
   }
+
+  publish(roomId: number, airConditionerId: number, toggled: boolean) {
+    const topic = `room/${roomId}/air-conditioner/${airConditionerId}/state`;
+    this.client.publish(topic, toggled ? "1" : "0");
+  }
 }
+
+export const appMqttClient = new AppMqttClient();

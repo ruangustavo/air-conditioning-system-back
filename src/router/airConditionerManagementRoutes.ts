@@ -14,4 +14,9 @@ router
   .put(AirConditionerManagementController.updateAirConditioner)
   .delete(AirConditionerManagementController.deleteAirConditioner);
 
+router
+  .route("/rooms/:roomId/air-conditioners/:id/state")
+  .get(AirConditionerManagementController.getAirConditionerState)
+  .put(AirConditionerManagementController.updateAirConditionerState);
+
 export default router;

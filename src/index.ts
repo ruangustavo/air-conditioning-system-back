@@ -1,14 +1,13 @@
 import * as dotenv from "dotenv";
-import { AppMqttClient } from "./config/mqtt";
+import { appMqttClient } from "./config/mqtt";
 import server from "./server";
 
 // Loading the environment variables
 dotenv.config();
 
-// Connecting to the MQTT broker
-const client = new AppMqttClient();
-client.setUpCallbacks();
-client.setUpTopicsSubscription();
+// Setting up the MQTT client
+appMqttClient.setUpCallbacks();
+appMqttClient.setUpTopicsSubscription();
 
 // Turning on the server
 const port = process.env.PORT || 3333;

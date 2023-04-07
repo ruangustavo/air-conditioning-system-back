@@ -8,6 +8,14 @@ type AirConditionerInput = {
 };
 
 class AirConditionerServices {
+  async getAllAirConditioners(roomId: number): Promise<AirConditioner[]> {
+    return await prisma.airConditioner.findMany({
+      where: {
+        roomId: roomId,
+      },
+    });
+  }
+
   async getAirConditionerById(id: number): Promise<AirConditioner | null> {
     return await prisma.airConditioner.findUnique({
       where: { id: id },

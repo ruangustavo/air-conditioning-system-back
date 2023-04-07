@@ -2,12 +2,9 @@ import { appMqttClient } from "../mqtt/client";
 import { AirConditioner } from "@prisma/client";
 
 class MqttService {
-  publishAirConditionerState(
-    airConditioner: AirConditioner,
-    state: boolean
-  ): void {
+  publishAirConditionerState(airConditioner: AirConditioner): void {
     const topic = appMqttClient.getTopic(airConditioner);
-    appMqttClient.publish(topic, state ? "1" : "0");
+    appMqttClient.publish(topic, airConditioner.toggled ? "1" : "0");
   }
 }
 

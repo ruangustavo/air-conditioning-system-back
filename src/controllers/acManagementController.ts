@@ -1,4 +1,4 @@
-import { appMqttClient } from "../config/mqtt";
+import { appMqttClient } from "../mqtt/client";
 import { prisma } from "../db";
 import { Request, Response } from "express";
 
@@ -77,27 +77,27 @@ export class AirConditionerManagementController {
   }
 
   static async updateAirConditionerState(req: Request, res: Response) {
-    const roomId = Number(req.params.roomId);
     const id = Number(req.params.id);
-
     const airConditioner = await prisma.airConditioner.findUnique({
-      where: {
-        id: id,
-      },
+      where: { id: id },
     });
 
-    const newState = !airConditioner?.toggled;
+    if (!airConditioner) {
+      res.status(404).json({ message: "Air conditioner not found" });
+    }
 
-    await prisma.airConditioner.update({
+    const newStatus = !airConditioner?.toggled;
+
+    const updatedAirConditioner = await prisma.airConditioner.update({
       where: {
         id: id,
       },
       data: {
-        toggled: newState,
+        toggled: newStatus,
       },
     });
 
-    appMqttClient.publish(roomId, id, newState);
-    res.status(200).json({ toggled: newState });
+    const topic = appMqttClient.getTopic(updatedAirConditioner);
+    appMqttClient.publish(topic, newStatus ? "1" : "0");
   }
 }

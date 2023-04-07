@@ -66,8 +66,11 @@ class AirConditionerServices {
     return toggled ?? false;
   }
 
-  async updateAirConditionerState(id: number, toggled: boolean): Promise<void> {
-    await prisma.airConditioner.update({
+  async updateAirConditionerState(
+    id: number,
+    toggled: boolean
+  ): Promise<AirConditioner> {
+    const updatedAirConditioner = await prisma.airConditioner.update({
       where: {
         id: id,
       },
@@ -75,6 +78,8 @@ class AirConditionerServices {
         toggled: toggled,
       },
     });
+
+    return updatedAirConditioner;
   }
 }
 

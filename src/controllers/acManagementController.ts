@@ -1,6 +1,6 @@
-import { appMqttClient } from "../mqtt/client";
 import { Request, Response } from "express";
 import { airConditionerService } from "../services/airConditionerService";
+import { mqttService } from "../services/mqttService";
 
 export class AirConditionerManagementController {
   static async getAllAirConditioners(
@@ -53,7 +53,7 @@ export class AirConditionerManagementController {
   ): Promise<void> {
     const id = Number(req.params.id);
     await airConditionerService.deleteAirConditioner(id);
-    res.status(204);
+    res.status(204).json({ message: "Air conditioner deleted" });
   }
 
   static async getAirConditionerState(
@@ -80,9 +80,8 @@ export class AirConditionerManagementController {
     }
 
     const newState = !airConditioner?.toggled;
-    await airConditionerService.updateAirConditionerState(id, newState);
-
-    const topic = appMqttClient.getTopic(airConditioner!);
-    appMqttClient.publish(topic, newState ? "1" : "0");
+    const updatedAirConditioner =
+      await airConditionerService.updateAirConditionerState(id, newState);
+    mqttService.publishAirConditionerState(updatedAirConditioner, newState);
   }
 }

@@ -14,6 +14,4 @@ app.use(morgan("dev"));
 app.use("/", roomRouter);
 app.use("/", airConditionerManagementRouter);
 
-// Turning on the server
-const port = process.env.PORT || 3333;
-app.listen(port, () => console.log("Server is running!"));
+export default app;

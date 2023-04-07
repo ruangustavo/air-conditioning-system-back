@@ -17,12 +17,13 @@ model Room {
 }
 
 model AirConditioner {
-  id    Int    @id @default(autoincrement())
-  brand String
-  model String
+  id      Int     @id @default(autoincrement())
+  brand   String
+  model   String
+  toggled Boolean @default(false)
 
-  room   Room? @relation(fields: [roomId], references: [id])
-  roomId Int?
+  room   Room @relation(fields: [roomId], references: [id])
+  roomId Int
 
   @@map("air_conditioners")
 }

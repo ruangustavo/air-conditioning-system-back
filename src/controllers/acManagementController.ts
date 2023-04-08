@@ -3,6 +3,9 @@ import { airConditionerService } from "../services/airConditionerService";
 import { mqttService } from "../services/mqttService";
 
 export class AirConditionerManagementController {
+  /**
+   * Get all air conditioners
+   */
   static async getAllAirConditioners(
     req: Request,
     res: Response
@@ -14,6 +17,9 @@ export class AirConditionerManagementController {
     res.status(200).json(airConditioners);
   }
 
+  /**
+   * Add a new air conditioner
+   */
   static async addAirConditioner(req: Request, res: Response): Promise<void> {
     const roomId = Number(req.params.roomId);
     const airConditioner = await airConditionerService.addAirConditioner(
@@ -23,6 +29,9 @@ export class AirConditionerManagementController {
     res.status(201).json(airConditioner);
   }
 
+  /**
+   * Get a specific air conditioner
+   */
   static async getAirConditioner(req: Request, res: Response): Promise<void> {
     const id = Number(req.params.id);
     const airConditioners = await airConditionerService.getAirConditionerById(
@@ -36,6 +45,9 @@ export class AirConditionerManagementController {
     res.status(200).json(airConditioners);
   }
 
+  /**
+   * Update a specific air conditioner
+   */
   static async updateAirConditioner(
     req: Request,
     res: Response
@@ -48,6 +60,9 @@ export class AirConditionerManagementController {
     res.status(200).json(airConditioner);
   }
 
+  /**
+   * Delete a specific air conditioner
+   */
   static async deleteAirConditioner(
     req: Request,
     res: Response
@@ -57,6 +72,9 @@ export class AirConditionerManagementController {
     res.status(204).json({ message: "Air conditioner deleted" });
   }
 
+  /**
+   * Get air conditioner state
+   */
   static async getAirConditionerState(
     req: Request,
     res: Response
@@ -67,6 +85,9 @@ export class AirConditionerManagementController {
     res.status(200).json({ toggled: airConditionerState });
   }
 
+  /**
+   * Update air conditioner state
+   */
   static async updateAirConditionerState(
     req: Request,
     res: Response

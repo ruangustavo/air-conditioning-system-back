@@ -14,6 +14,9 @@ class AppMqttClient extends EventEmitter {
     this.setUpCallbacks();
   }
 
+  /**
+   * Sets up the callbacks for the MQTT client.
+   */
   private setUpCallbacks(): void {
     this.on("connect", () => this.emit("connect"));
     this.on("error", (error) => this.emit("error", error));
@@ -22,6 +25,9 @@ class AppMqttClient extends EventEmitter {
     );
   }
 
+  /**
+   * Sets up the air-conditioners topics subscription for the MQTT client.
+   */
   async setUpTopicsSubscription(): Promise<void> {
     const airConditioners = await this.fetchAirConditioners();
 
@@ -31,14 +37,28 @@ class AppMqttClient extends EventEmitter {
     });
   }
 
+  /**
+   * Publishes a message to a topic.
+   * @param topic The topic to publish the message to.
+   * @param message The message to publish.
+   */
   publish(topic: string, message: string): void {
     this.client.publish(topic, message);
   }
 
+  /**
+   * Gets the topic for an air conditioner.
+   * @param airConditioner Air conditioner to get the topic from.
+   * @returns The topic for the air conditioner.
+   */
   getTopic(airConditioner: AirConditioner): string {
     return `room/${airConditioner.roomId}/air-conditioner/${airConditioner.id}`;
   }
 
+  /**
+   * Fetches the air-conditioners from the database.
+   * @returns The air-conditioners from the database.
+   */
   private async fetchAirConditioners(): Promise<AirConditioner[]> {
     return await prisma.airConditioner.findMany();
   }

@@ -7,7 +7,7 @@ type AirConditionerInput = {
   toggled: boolean;
 };
 
-class AirConditionerServices {
+class AirConditionerService {
   /**
    * Get all air conditioners of a room
    * @param roomId Id of the room
@@ -132,4 +132,4 @@ class AirConditionerServices {
   }
 }
 
-export const airConditionerService = new AirConditionerServices();
+export const airConditionerService = new AirConditionerService();

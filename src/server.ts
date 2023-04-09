@@ -1,7 +1,7 @@
 import express from "express";
 import morgan from "morgan";
-import roomRouter from "./routers/roomRoutes";
-import airConditionerManagementRouter from "./routers/acManagementRoutes";
+import roomRouter from "./routes/room-routes";
+import airConditionerManagementRouter from "./routes/air-conditioner-routes";
 
 const app = express();
 

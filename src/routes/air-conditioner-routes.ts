@@ -1,5 +1,5 @@
 import express from "express";
-import { AirConditionerManagementController } from "../controllers/acManagementController";
+import { AirConditionerManagementController } from "../controllers/air-conditioner-controller";
 
 const router = express.Router();
 

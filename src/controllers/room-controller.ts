@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { roomServices } from "../services/roomService";
+import { roomServices } from "../services/room-services";
 
 export class RoomController {
   /**

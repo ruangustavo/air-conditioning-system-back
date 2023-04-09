@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { airConditionerService } from "../services/airConditionerService";
-import { mqttService } from "../services/mqttService";
+import { airConditionerService } from "../services/air-conditioner-services";
+import { mqttService } from "../services/mqtt-services";
 
 export class AirConditionerManagementController {
   /**

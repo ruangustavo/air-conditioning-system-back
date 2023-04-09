@@ -1,7 +1,7 @@
 import { prisma } from "../db";
 import { Room } from "@prisma/client";
 
-class RoomServices {
+class RoomService {
   /**
    * Get all rooms
    * @returns All rooms
@@ -50,4 +50,4 @@ class RoomServices {
   }
 }
 
-export const roomServices = new RoomServices();
+export const roomServices = new RoomService();

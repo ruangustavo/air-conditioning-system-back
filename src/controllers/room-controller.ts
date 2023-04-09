@@ -1,46 +1,52 @@
 import { Request, Response } from "express";
-import { roomServices } from "../services/room-services";
+import { IRoomService } from "../services/interfaces/i-room-service";
+import bindMethods from "../utils/bindMethods";
 
 export class RoomController {
+  constructor(private roomService: IRoomService) {
+    bindMethods(this);
+  }
+
   /**
    * Get all rooms
    */
-  static async getAllRooms(_req: Request, res: Response): Promise<void> {
-    const rooms = await roomServices.getAllRooms();
+  async getAllRooms(_req: Request, res: Response): Promise<void> {
+    const rooms = await this.roomService.getRooms();
     res.status(200).json(rooms);
   }
+
   /**
    * Add a room
    */
-  static async addRoom(req: Request, res: Response): Promise<void> {
-    const room = await roomServices.addRoom(req.body);
+  async addRoom(req: Request, res: Response): Promise<void> {
+    const room = await this.roomService.addRoom(req.body);
     res.status(201).json(room);
   }
 
   /**
    * Get a room
    */
-  static async getRoom(req: Request, res: Response): Promise<void> {
+  async getRoom(req: Request, res: Response): Promise<void> {
     const roomId = Number(req.params.id);
-    const room = await roomServices.getRoomById(roomId);
+    const room = await this.roomService.getRoomById(roomId);
     res.status(200).json(room);
   }
 
   /**
    * Delete a room
    */
-  static async deleteRoom(req: Request, res: Response): Promise<void> {
+  async deleteRoom(req: Request, res: Response): Promise<void> {
     const roomId = Number(req.params.id);
-    await roomServices.deleteRoom(roomId);
+    await this.roomService.deleteRoom(roomId);
     res.status(204).send();
   }
 
   /**
    * Update a room
    */
-  static async updateRoom(req: Request, res: Response): Promise<void> {
+  async updateRoom(req: Request, res: Response): Promise<void> {
     const roomId = Number(req.params.id);
-    await roomServices.updateRoom(roomId, req.body);
+    await this.roomService.updateRoom(roomId, req.body);
     res.status(204).send();
   }
 }

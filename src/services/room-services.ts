@@ -1,12 +1,13 @@
 import { prisma } from "../db";
 import { Room } from "@prisma/client";
+import { IRoomService } from "./interfaces/i-room-service";
 
-class RoomService {
+class RoomService implements IRoomService {
   /**
    * Get all rooms
    * @returns All rooms
    */
-  async getAllRooms(): Promise<Room[]> {
+  async getRooms(): Promise<Room[]> {
     return await prisma.room.findMany();
   }
 

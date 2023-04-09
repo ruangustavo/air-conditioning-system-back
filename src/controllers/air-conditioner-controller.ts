@@ -1,28 +1,32 @@
 import { Request, Response } from "express";
-import { airConditionerService } from "../services/air-conditioner-services";
-import { mqttService } from "../services/mqtt-services";
+import { IAirConditionerService } from "../services/interfaces/i-air-conditioner-service";
+import { IMqttInterface } from "../services/interfaces/i-mqtt-service";
+import bindMethods from "../utils/bindMethods";
 
 export class AirConditionerManagementController {
+  constructor(
+    private airConditionerService: IAirConditionerService,
+    private mqttService: IMqttInterface
+  ) {
+    bindMethods(this);
+  }
+
   /**
    * Get all air conditioners
    */
-  static async getAllAirConditioners(
-    req: Request,
-    res: Response
-  ): Promise<void> {
+  async getAllAirConditioners(req: Request, res: Response): Promise<void> {
     const roomId = Number(req.params.roomId);
-    const airConditioners = await airConditionerService.getAllAirConditioners(
-      roomId
-    );
+    const airConditioners =
+      await this.airConditionerService.getAllAirConditionersByRoomId(roomId);
     res.status(200).json(airConditioners);
   }
 
   /**
    * Add a new air conditioner
    */
-  static async addAirConditioner(req: Request, res: Response): Promise<void> {
+  async addAirConditioner(req: Request, res: Response): Promise<void> {
     const roomId = Number(req.params.roomId);
-    const airConditioner = await airConditionerService.addAirConditioner(
+    const airConditioner = await this.airConditionerService.addAirConditioner(
       roomId,
       req.body
     );
@@ -32,11 +36,10 @@ export class AirConditionerManagementController {
   /**
    * Get a specific air conditioner
    */
-  static async getAirConditioner(req: Request, res: Response): Promise<void> {
+  async getAirConditioner(req: Request, res: Response): Promise<void> {
     const id = Number(req.params.id);
-    const airConditioners = await airConditionerService.getAirConditionerById(
-      id
-    );
+    const airConditioners =
+      await this.airConditionerService.getAirConditionerById(id);
 
     if (!airConditioners) {
       res.status(404).json({ message: "Air conditioner not found" });
@@ -48,57 +51,46 @@ export class AirConditionerManagementController {
   /**
    * Update a specific air conditioner
    */
-  static async updateAirConditioner(
-    req: Request,
-    res: Response
-  ): Promise<void> {
+  async updateAirConditioner(req: Request, res: Response): Promise<void> {
     const id = Number(req.params.id);
-    const airConditioner = await airConditionerService.updateAirConditioner(
-      id,
-      req.body
-    );
+    const airConditioner =
+      await this.airConditionerService.updateAirConditioner(id, req.body);
     res.status(200).json(airConditioner);
   }
 
   /**
    * Delete a specific air conditioner
    */
-  static async deleteAirConditioner(
-    req: Request,
-    res: Response
-  ): Promise<void> {
+  async deleteAirConditioner(req: Request, res: Response): Promise<void> {
     const id = Number(req.params.id);
-    await airConditionerService.deleteAirConditioner(id);
+    await this.airConditionerService.deleteAirConditioner(id);
     res.status(204).json({ message: "Air conditioner deleted" });
   }
 
   /**
    * Get air conditioner state
    */
-  static async getAirConditionerState(
-    req: Request,
-    res: Response
-  ): Promise<void> {
+  async getAirConditionerState(req: Request, res: Response): Promise<void> {
     const id = Number(req.params.id);
     const airConditionerState =
-      await airConditionerService.getAirConditionerState(id);
+      await this.airConditionerService.getAirConditionerState(id);
     res.status(200).json({ toggled: airConditionerState });
   }
 
   /**
    * Update air conditioner state
    */
-  static async updateAirConditionerState(
-    req: Request,
-    res: Response
-  ): Promise<void> {
+  async updateAirConditionerState(req: Request, res: Response): Promise<void> {
     const id = Number(req.params.id);
     const toggled = req.body.toggled;
 
     const airConditioner =
-      await airConditionerService.updateAirConditionerState(id, toggled);
+      await this.airConditionerService.updateAirConditionerState({
+        id,
+        toggled,
+      });
 
-    mqttService.publishAirConditionerState(airConditioner);
+    this.mqttService.publishAirConditionerState(airConditioner, toggled);
     res.status(200).json(airConditioner);
   }
 }

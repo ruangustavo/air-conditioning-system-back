@@ -1,19 +1,20 @@
 import { prisma } from "../db";
 import { AirConditioner } from "@prisma/client";
+import {
+  AirConditionerProps,
+  AirConditionerStateProps,
+  IAirConditionerService,
+} from "./interfaces/i-air-conditioner-service";
 
-type AirConditionerInput = {
-  brand: string;
-  model: string;
-  toggled: boolean;
-};
-
-class AirConditionerService {
+class AirConditionerService implements IAirConditionerService {
   /**
    * Get all air conditioners of a room
    * @param roomId Id of the room
    * @returns All air conditioners of a room
    */
-  async getAllAirConditioners(roomId: number): Promise<AirConditioner[]> {
+  async getAllAirConditionersByRoomId(
+    roomId: number
+  ): Promise<AirConditioner[]> {
     return await prisma.airConditioner.findMany({
       where: {
         roomId: roomId,
@@ -40,7 +41,7 @@ class AirConditionerService {
    */
   async addAirConditioner(
     roomId: number,
-    airConditioner: AirConditionerInput
+    airConditioner: AirConditionerProps
   ): Promise<AirConditioner> {
     return await prisma.airConditioner.create({
       data: {
@@ -70,7 +71,7 @@ class AirConditionerService {
    */
   async updateAirConditioner(
     id: number,
-    data: AirConditionerInput
+    data: AirConditionerProps
   ): Promise<void> {
     await prisma.airConditioner.update({
       where: {
@@ -115,10 +116,10 @@ class AirConditionerService {
    * @param toggled State of the air conditioner
    * @returns Updated air conditioner
    */
-  async updateAirConditionerState(
-    id: number,
-    toggled: boolean
-  ): Promise<AirConditioner> {
+  async updateAirConditionerState({
+    id,
+    toggled,
+  }: AirConditionerStateProps): Promise<AirConditioner> {
     const updatedAirConditioner = await prisma.airConditioner.update({
       where: {
         id: id,

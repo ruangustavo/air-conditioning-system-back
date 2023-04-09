@@ -8,7 +8,7 @@ class RoomService implements IRoomService {
    * @returns All rooms
    */
   async getRooms(): Promise<Room[]> {
-    return await prisma.room.findMany();
+    return prisma.room.findMany();
   }
 
   /**
@@ -17,7 +17,7 @@ class RoomService implements IRoomService {
    * @returns Added room
    */
   async addRoom(room: Room): Promise<Room> {
-    return await prisma.room.create({ data: { ...room } });
+    return prisma.room.create({ data: { ...room } });
   }
 
   /**
@@ -26,7 +26,7 @@ class RoomService implements IRoomService {
    * @returns Room with id or null if not found
    */
   async getRoomById(id: number): Promise<Room | null> {
-    return await prisma.room.findUnique({ where: { id: id } });
+    return prisma.room.findUnique({ where: { id: id } });
   }
 
   /**
@@ -36,10 +36,7 @@ class RoomService implements IRoomService {
    * @returns Updated room
    */
   async updateRoom(id: number, room: Room): Promise<void> {
-    await prisma.room.update({
-      where: { id: id },
-      data: { ...room },
-    });
+    await prisma.room.update({ where: { id }, data: room });
   }
 
   /**

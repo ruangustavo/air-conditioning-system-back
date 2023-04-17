@@ -1,28 +1,18 @@
 import express from "express";
 import { AirConditionerManagementController } from "../controllers/air-conditioner-controller";
-import { airConditionerService } from "../services/air-conditioner-services";
-import { mqttService } from "../services/mqtt-services";
 
 const router = express.Router();
-const controller = new AirConditionerManagementController(
-  airConditionerService,
-  mqttService
-);
+const controller = new AirConditionerManagementController();
 
 router
-  .route("/rooms/:roomId/air-conditioners")
+  .route("/air-conditioners")
   .get(controller.getAllAirConditioners)
-  .post(controller.addAirConditioner);
-
-router
-  .route("/rooms/:roomId/air-conditioners/:id")
-  .get(controller.getAirConditioner)
+  .post(controller.createAirConditioner)
   .put(controller.updateAirConditioner)
   .delete(controller.deleteAirConditioner);
 
 router
-  .route("/rooms/:roomId/air-conditioners/:id/state")
-  .get(controller.getAirConditionerState)
+  .route("/air-conditioners/:id/state")
   .put(controller.updateAirConditionerState);
 
 export default router;

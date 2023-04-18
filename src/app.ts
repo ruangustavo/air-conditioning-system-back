@@ -1,5 +1,5 @@
 import * as dotenv from "dotenv";
-import { appMqttClient } from "./mqtt/client";
+import { mqttClient } from "./mqtt/client";
 import { onConnect, onError, onMessage } from "./mqtt/events";
 import server from "./server";
 
@@ -7,10 +7,9 @@ import server from "./server";
 dotenv.config();
 
 // Setting up the MQTT client
-appMqttClient.setUpTopicsSubscription();
-appMqttClient.on("connect", onConnect);
-appMqttClient.on("error", onError);
-appMqttClient.on("message", onMessage);
+mqttClient.on("connect", onConnect);
+mqttClient.on("error", onError);
+mqttClient.on("message", onMessage);
 
 // Turning on the server
 const port = process.env.PORT || 3333;

@@ -1,18 +1,18 @@
 import express from "express";
-import { AirConditionerManagementController } from "../controllers/air-conditioner-controller";
+import { AirConditionerController } from "../controllers/air-conditioner-controller";
 
 const router = express.Router();
-const controller = new AirConditionerManagementController();
+const controller = new AirConditionerController();
 
 router
   .route("/air-conditioners")
   .get(controller.getAllAirConditioners)
   .post(controller.createAirConditioner)
-  .put(controller.updateAirConditioner)
-  .delete(controller.deleteAirConditioner);
+  .put(controller.updateOneAirConditioner)
+  .delete(controller.deleteOneAirConditioner);
 
 router
   .route("/air-conditioners/:id/state")
-  .put(controller.updateAirConditionerState);
+  .put(controller.updateOneAirConditionerState);
 
 export default router;

@@ -8,10 +8,9 @@ datasource db {
 }
 
 model AirConditioner {
-  id      Int     @id @default(autoincrement())
-  brand   String
-  model   String
-  toggled Boolean @default(false)
+  id    Int    @id @default(autoincrement())
+  brand String
+  model String
 
   @@map("air_conditioners")
 }

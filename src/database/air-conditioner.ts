@@ -21,7 +21,7 @@ export class AirConditioner {
 
   static create = async (airConditioner: AirConditionerEntity) => {
     const createdAirConditioner = await prisma.airConditioner.create({
-      data: airConditioner,
+      data: { ...airConditioner },
     });
     return createdAirConditioner;
   };

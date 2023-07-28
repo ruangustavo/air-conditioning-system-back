@@ -1,6 +1,6 @@
 import express from "express";
 import morgan from "morgan";
-import airConditionerRouter from "./routes/air-conditioner-routes";
+import airConditionerRouter from "./routes/air-conditioner.route";
 import cors from "cors";
 
 const app = express();

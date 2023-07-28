@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { AirConditionerService } from "../services/air-conditioner.service";
-import { mqttClient } from "../mqtt/client";
+import { mqttClient } from "../lib/mqtt"
 
 /**
  * This controller is responsible for handling the requests for the air-conditioners.

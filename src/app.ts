@@ -1,16 +1,17 @@
-import * as dotenv from "dotenv";
-import { mqttClient } from "./mqtt/client";
-import { onConnect, onError, onMessage } from "./mqtt/events";
-import server from "./server";
+import express from "express";
+import morgan from "morgan";
+import airConditionerRouter from "./routes/air-conditioner-routes";
+import cors from "cors";
 
-// Loading the environment variables
-dotenv.config();
+const app = express();
 
-// Setting up the MQTT client
-mqttClient.on("connect", onConnect);
-mqttClient.on("error", onError);
-mqttClient.on("message", onMessage);
+// Setting up middlewares
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(morgan("dev"));
+app.use(cors());
 
-// Turning on the server
-const port = process.env.PORT || 3333;
-server.listen(port, () => console.log("Server is running!"));
+// Setting up routes
+app.use("/air-conditioners", airConditionerRouter);
+
+export default app;

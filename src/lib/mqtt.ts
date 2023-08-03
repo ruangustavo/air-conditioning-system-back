@@ -1,4 +1,4 @@
-import mqtt, { IClientOptions } from "mqtt";
+import { connect, IClientOptions } from "mqtt";
 
 const MQTT_HOST = process.env.MQTT_HOST || "mqtt://broker.hivemq.com";
 
@@ -22,10 +22,11 @@ const createMqttCallbacks = (): MqttEvents => {
   };
 
   return { onConnect, onError, onMessage };
-}
+};
 
 const createMqttClient = (options?: IClientOptions) => {
-  const mqttClient = mqtt.connect(MQTT_HOST, options);
+  const mqttClient = connect(MQTT_HOST, options);
+
   const mqttCallbacks = createMqttCallbacks();
 
   mqttClient.on("connect", mqttCallbacks.onConnect);
@@ -33,6 +34,6 @@ const createMqttClient = (options?: IClientOptions) => {
   mqttClient.on("message", mqttCallbacks.onMessage);
 
   return mqttClient;
-}
+};
 
 export const mqttClient = createMqttClient();

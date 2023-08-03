@@ -26,7 +26,10 @@ router
   .post(
     validateBodyRequest(createAirConditionerSchema),
     airConditionerController.createAirConditioner
-  )
+  );
+
+router
+  .route("/:id")
   .put(
     validateBodyRequest(updateAirConditionerSchema),
     airConditionerController.updateOneAirConditioner

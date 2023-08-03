@@ -5,10 +5,7 @@ export const createAirConditionerSchema = z.object({
   model: z.string(),
 });
 
-export const updateAirConditionerSchema = z.object({
-  brand: z.string().optional(),
-  model: z.string().optional(),
-});
+export const updateAirConditionerSchema = createAirConditionerSchema.partial();
 
 export const deleteAirConditionerSchema = z.object({
   id: z.number(),

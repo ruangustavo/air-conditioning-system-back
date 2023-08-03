@@ -7,8 +7,8 @@ import { mqttClient } from "../lib/mqtt";
  * It is used by the routes to get the data from the services.
  */
 
-const TURN_ON_AIR_CONDITIONER_COMMAND = "1";
-const TURN_OFF_AIR_CONDITIONER_COMMAND = "0";
+const TURN_ON_COMMAND = "1";
+const TURN_OFF_COMMAND = "0";
 
 export class AirConditionerController {
   constructor(private airConditionerService: AirConditionerService) {}
@@ -25,7 +25,7 @@ export class AirConditionerController {
   };
 
   createAirConditioner = async (req: Request, res: Response) => {
-    const airConditioner = req.body;
+    const airConditioner = req.validatedData;
     const newAirConditioner = await this.airConditionerService.create(
       airConditioner
     );
@@ -34,7 +34,7 @@ export class AirConditionerController {
 
   updateOneAirConditioner = async (req: Request, res: Response) => {
     const id = Number(req.params.id);
-    const airConditioner = req.body;
+    const airConditioner = req.validatedData;
     const updatedAirConditioner = await this.airConditionerService.update(
       id,
       airConditioner
@@ -50,11 +50,11 @@ export class AirConditionerController {
 
   updateOneAirConditionerState = async (req: Request, res: Response) => {
     const id = Number(req.params.id);
-    const state = req.body.state;
+    const { state } = req.validatedData;
     mqttClient.publish(
       `air-conditioner/${id}/state`,
-      state ? TURN_ON_AIR_CONDITIONER_COMMAND : TURN_OFF_AIR_CONDITIONER_COMMAND
+      state ? TURN_ON_COMMAND : TURN_OFF_COMMAND
     );
-    res.json({ message: "State updated successfully!" });
+    res.json({ success: true });
   };
 }

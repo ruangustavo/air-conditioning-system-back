@@ -12,5 +12,8 @@ model AirConditioner {
   brand String
   model String
 
+  updated_at DateTime @default(now())
+  created_at DateTime @default(now())
+
   @@map("air_conditioners")
 }

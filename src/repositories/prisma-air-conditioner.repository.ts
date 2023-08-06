@@ -1,5 +1,5 @@
 import { AirConditioner as AirConditionerEntity } from "@prisma/client";
-import { prisma } from "../lib/prisma";
+import { prisma } from "@/lib";
 import { AirConditionerRepository } from "./air-conditioner.repository";
 
 /**
@@ -7,7 +7,9 @@ import { AirConditionerRepository } from "./air-conditioner.repository";
  * It is used by the services to get the data from the database.
  */
 
-export class PrismaAirConditionerRepository implements AirConditionerRepository {
+export class PrismaAirConditionerRepository
+  implements AirConditionerRepository
+{
   getAll = async () => {
     const airConditioners = await prisma.airConditioner.findMany();
     return airConditioners;

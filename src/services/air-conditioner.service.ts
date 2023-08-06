@@ -1,5 +1,5 @@
 import { AirConditioner } from "@prisma/client";
-import { AirConditionerRepository } from "../repositories/air-conditioner.repository";
+import { AirConditionerRepository } from "../repositories";
 
 /**
  * This service is responsible for handling the business logic for the air-conditioners.
@@ -7,9 +7,7 @@ import { AirConditionerRepository } from "../repositories/air-conditioner.reposi
  */
 
 export class AirConditionerService {
-  constructor(
-    private airConditionerRepository: AirConditionerRepository
-  ){}
+  constructor(private airConditionerRepository: AirConditionerRepository) {}
 
   getAll = async () => {
     const airConditioners = this.airConditionerRepository.getAll();
@@ -22,7 +20,9 @@ export class AirConditionerService {
   };
 
   create = async (airConditioner: AirConditioner) => {
-    const airConditionerCreated = await this.airConditionerRepository.create(airConditioner);
+    const airConditionerCreated = await this.airConditionerRepository.create(
+      airConditioner
+    );
     return airConditionerCreated;
   };
 
@@ -35,7 +35,9 @@ export class AirConditionerService {
   };
 
   delete = async (id: number) => {
-    const deletedAirConditioner = await this.airConditionerRepository.delete(id);
+    const deletedAirConditioner = await this.airConditionerRepository.delete(
+      id
+    );
     return deletedAirConditioner;
   };
 }

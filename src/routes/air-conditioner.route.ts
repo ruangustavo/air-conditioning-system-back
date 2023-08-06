@@ -1,14 +1,15 @@
 import express from "express";
-import { AirConditionerController } from "../controllers/air-conditioner.controller";
-import { validateBodyRequest } from "../middlewares/validate-body-request.middleware";
-import { PrismaAirConditionerRepository } from "../repositories/prisma-air-conditioner.repository";
+import { AirConditionerController } from "../controllers";
+
+import { validateBodyRequest } from "../middlewares";
+import { PrismaAirConditionerRepository } from "../repositories";
 import {
   createAirConditionerSchema,
   deleteAirConditionerSchema,
   updateAirConditionerSchema,
   updateAirConditionerStateSchema,
-} from "../schemas/air-conditioner.schema";
-import { AirConditionerService } from "../services/air-conditioner.service";
+} from "../schemas";
+import { AirConditionerService } from "../services";
 
 const router = express.Router();
 

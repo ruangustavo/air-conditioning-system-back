@@ -2,5 +2,9 @@
   "extends": "standard-with-typescript",
   "parserOptions": {
     "project": "tsconfig.json"
+  },
+  "rules": {
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/no-misused-promises": "off" // it was causing troubles in routes
   }
 }

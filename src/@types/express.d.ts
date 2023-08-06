@@ -1,10 +1,9 @@
-import { Request } from "express";
-import { z } from "zod";
+import { type z } from 'zod'
 
 declare global {
   namespace Express {
     export interface Request {
-      validatedData: z.infer<any>;
+      validatedData: z.infer<any>
     }
   }
 }

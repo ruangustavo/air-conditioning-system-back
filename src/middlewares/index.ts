@@ -1,1 +1,1 @@
-export * from "./validate-body-request.middleware";
+export * from './validate-body-request.middleware'

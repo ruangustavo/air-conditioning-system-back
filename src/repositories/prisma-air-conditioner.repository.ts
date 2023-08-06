@@ -1,6 +1,6 @@
-import { AirConditioner as AirConditionerEntity } from "@prisma/client";
-import { prisma } from "@/lib";
-import { AirConditionerRepository } from "./air-conditioner.repository";
+import { type AirConditioner as AirConditionerEntity } from '@prisma/client'
+import { prisma } from '@/lib'
+import { type AirConditionerRepository } from './air-conditioner.repository'
 
 /**
  * This class is responsible for handling the database operations for the air-conditioners.
@@ -8,39 +8,38 @@ import { AirConditionerRepository } from "./air-conditioner.repository";
  */
 
 export class PrismaAirConditionerRepository
-  implements AirConditionerRepository
-{
+implements AirConditionerRepository {
   getAll = async () => {
-    const airConditioners = await prisma.airConditioner.findMany();
-    return airConditioners;
-  };
+    const airConditioners = await prisma.airConditioner.findMany()
+    return airConditioners
+  }
 
   getOne = async (id: number) => {
     const airConditioner = prisma.airConditioner.findUnique({
-      where: { id },
-    });
-    return airConditioner;
-  };
+      where: { id }
+    })
+    return await airConditioner
+  }
 
   create = async (airConditioner: AirConditionerEntity) => {
     const createdAirConditioner = await prisma.airConditioner.create({
-      data: { ...airConditioner },
-    });
-    return createdAirConditioner;
-  };
+      data: { ...airConditioner }
+    })
+    return createdAirConditioner
+  }
 
   update = async (id: number, airConditioner: AirConditionerEntity) => {
     const updatedAirConditioner = await prisma.airConditioner.update({
       where: { id },
-      data: airConditioner,
-    });
-    return updatedAirConditioner;
-  };
+      data: airConditioner
+    })
+    return updatedAirConditioner
+  }
 
   delete = async (id: number) => {
     const deletedAirConditioner = await prisma.airConditioner.delete({
-      where: { id },
-    });
-    return deletedAirConditioner;
-  };
+      where: { id }
+    })
+    return deletedAirConditioner
+  }
 }

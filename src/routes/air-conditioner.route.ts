@@ -6,12 +6,11 @@ import { PrismaAirConditionerRepository } from '../repositories'
 import {
   createAirConditionerSchema,
   deleteAirConditionerSchema,
-  updateAirConditionerSchema,
-  updateAirConditionerStateSchema
+  updateAirConditionerSchema
 } from '../schemas'
 import { AirConditionerService } from '../services'
 
-const router = express.Router()
+export const airConditionerRouter = express.Router()
 
 const prismaAirConditionerRepository = new PrismaAirConditionerRepository()
 const airConditionerService = new AirConditionerService(
@@ -21,7 +20,7 @@ const airConditionerController = new AirConditionerController(
   airConditionerService
 )
 
-router
+airConditionerRouter
   .route('/')
   .get(airConditionerController.getAllAirConditioners)
   .post(
@@ -29,7 +28,7 @@ router
     airConditionerController.createAirConditioner
   )
 
-router
+airConditionerRouter
   .route('/:id')
   .put(
     validateBodyRequest(updateAirConditionerSchema),
@@ -40,11 +39,4 @@ router
     airConditionerController.deleteOneAirConditioner
   )
 
-router
-  .route('/:id/state')
-  .put(
-    validateBodyRequest(updateAirConditionerStateSchema),
-    airConditionerController.updateOneAirConditionerState
-  )
-
-export default router
+export default airConditionerRouter

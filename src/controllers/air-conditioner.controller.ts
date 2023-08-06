@@ -1,14 +1,10 @@
 import { type Request, type Response } from 'express'
 import { type AirConditionerService } from '@/services'
-import { mqttClient } from '@/lib'
 
 /**
  * This controller is responsible for handling the requests for the air-conditioners.
  * It is used by the routes to get the data from the services.
  */
-
-const TURN_ON_COMMAND = '1'
-const TURN_OFF_COMMAND = '0'
 
 export class AirConditionerController {
   constructor (private readonly airConditionerService: AirConditionerService) {}
@@ -46,15 +42,5 @@ export class AirConditionerController {
     const id = Number(req.params.id)
     const deletedAirConditioner = await this.airConditionerService.delete(id)
     res.json(deletedAirConditioner)
-  }
-
-  updateOneAirConditionerState = async (req: Request, res: Response) => {
-    const id = Number(req.params.id)
-    const { state }: { state: boolean } = req.validatedData
-    mqttClient.publish(
-      `air-conditioner/${id}/state`,
-      state ? TURN_ON_COMMAND : TURN_OFF_COMMAND
-    )
-    res.json({ success: true })
   }
 }

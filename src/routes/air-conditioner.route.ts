@@ -1,35 +1,36 @@
-import express from "express";
-import { AirConditionerController } from "../controllers/air-conditioner.controller";
-import { validateBodyRequest } from "../middlewares/validate-body-request.middleware";
-import { PrismaAirConditionerRepository } from "../repositories/prisma-air-conditioner.repository";
+import express from 'express'
+import { AirConditionerController } from '../controllers'
+
+import { validateBodyRequest } from '../middlewares'
+import { PrismaAirConditionerRepository } from '../repositories'
 import {
   createAirConditionerSchema,
   deleteAirConditionerSchema,
   updateAirConditionerSchema,
-  updateAirConditionerStateSchema,
-} from "../schemas/air-conditioner.schema";
-import { AirConditionerService } from "../services/air-conditioner.service";
+  updateAirConditionerStateSchema
+} from '../schemas'
+import { AirConditionerService } from '../services'
 
-const router = express.Router();
+const router = express.Router()
 
-const prismaAirConditionerRepository = new PrismaAirConditionerRepository();
+const prismaAirConditionerRepository = new PrismaAirConditionerRepository()
 const airConditionerService = new AirConditionerService(
   prismaAirConditionerRepository
-);
+)
 const airConditionerController = new AirConditionerController(
   airConditionerService
-);
+)
 
 router
-  .route("/")
+  .route('/')
   .get(airConditionerController.getAllAirConditioners)
   .post(
     validateBodyRequest(createAirConditionerSchema),
     airConditionerController.createAirConditioner
-  );
+  )
 
 router
-  .route("/:id")
+  .route('/:id')
   .put(
     validateBodyRequest(updateAirConditionerSchema),
     airConditionerController.updateOneAirConditioner
@@ -37,13 +38,13 @@ router
   .delete(
     validateBodyRequest(deleteAirConditionerSchema),
     airConditionerController.deleteOneAirConditioner
-  );
+  )
 
 router
-  .route("/:id/state")
+  .route('/:id/state')
   .put(
     validateBodyRequest(updateAirConditionerStateSchema),
     airConditionerController.updateOneAirConditionerState
-  );
+  )
 
-export default router;
+export default router

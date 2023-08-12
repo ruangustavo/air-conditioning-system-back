@@ -8,7 +8,13 @@
     "build": "tsc -p tsconfig.json",
     "lint": "eslint .",
     "lint:fix": "npm run lint -- --fix",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "test:staged": "vitest related --run",
+    "test:create-prisma-environment": "npm link ./prisma/vitest-environment-prisma",
+    "test:install-prisma-environment": "npm link vitest-environment-prisma",
+    "pretest:e2e": "run-s test:create-prisma-environment test:install-prisma-environment",
+    "test:e2e": "vitest run --dir src/controllers",
+    "test:e2e:watch": "vitest --dir src/controllers"
   },
   "keywords": [],
   "author": "",
@@ -18,6 +24,7 @@
     "@types/express": "^4.17.17",
     "@types/jest": "^29.5.3",
     "@types/morgan": "^1.9.4",
+    "@types/supertest": "^2.0.12",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "eslint": "^8.46.0",
     "eslint-config-standard-with-typescript": "^34.0.1",
@@ -27,9 +34,12 @@
     "husky": "^8.0.3",
     "lint-staged": "^13.2.3",
     "morgan": "^1.10.0",
+    "npm-run-all": "^4.1.5",
     "prisma": "^5.0.0",
+    "supertest": "^6.3.3",
     "tsx": "^3.12.6",
     "typescript": "^5.0.3",
+    "vite-tsconfig-paths": "^4.2.0",
     "vitest": "^0.29.8"
   },
   "dependencies": {

@@ -5,7 +5,6 @@ import { validateBodyRequest } from '../middlewares'
 import { PrismaAirConditionerRepository } from '../repositories'
 import {
   createAirConditionerSchema,
-  deleteAirConditionerSchema,
   updateAirConditionerSchema
 } from '../schemas'
 import { AirConditionerService } from '../services'
@@ -30,12 +29,12 @@ airConditionerRouter
 
 airConditionerRouter
   .route('/:id')
+  .get(airConditionerController.getOneAirConditioner)
   .put(
     validateBodyRequest(updateAirConditionerSchema),
     airConditionerController.updateOneAirConditioner
   )
   .delete(
-    validateBodyRequest(deleteAirConditionerSchema),
     airConditionerController.deleteOneAirConditioner
   )
 

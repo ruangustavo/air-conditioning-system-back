@@ -25,7 +25,7 @@ export class AirConditionerController {
     const newAirConditioner = await this.airConditionerService.create(
       airConditioner
     )
-    res.json(newAirConditioner)
+    res.status(201).json(newAirConditioner)
   }
 
   updateOneAirConditioner = async (req: Request, res: Response) => {

@@ -6,7 +6,3 @@ export const createAirConditionerSchema = z.object({
 })
 
 export const updateAirConditionerSchema = createAirConditionerSchema.partial()
-
-export const deleteAirConditionerSchema = z.object({
-  id: z.number()
-})

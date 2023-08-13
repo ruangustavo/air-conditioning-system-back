@@ -136,4 +136,9 @@ describe('AirConditionerController (e2e)', () => {
     const response = await request(app).delete(`/air-conditioners/${nonExistentId}`)
     expect(response.status).toBe(404)
   })
+
+  it('should handle getting one air-conditioner with invalid id', async () => {
+    const response = await request(app).get('/air-conditioners/invalid-id')
+    expect(response.status).toBe(400)
+  })
 })

@@ -3,8 +3,8 @@ import { app } from '@/app'
 import request from 'supertest'
 import { prisma } from '@/lib'
 
-describe('AirConditionerStateController (e2e)', () => {
-  it('should update air conditioner state', async () => {
+describe('[e2e] AirConditionerStateController', () => {
+  it('should successfully update air conditioner state to "on"', async () => {
     const airConditioner = await prisma.airConditioner.create({
       data: {
         model: 'Air-conditioner',
@@ -20,7 +20,7 @@ describe('AirConditionerStateController (e2e)', () => {
     expect(response.body).toEqual({ success: true })
   })
 
-  it('should handle not-existent air conditioner', async () => {
+  it('should handle updating state of a non-existent air conditioner', async () => {
     const nonExistentId = 9999
 
     const response = await request(app)
@@ -31,7 +31,7 @@ describe('AirConditionerStateController (e2e)', () => {
     expect(response.body).toEqual({ error: 'Resource not found' })
   })
 
-  it('should handle invalid state', async () => {
+  it('should handle updating air conditioner state with an invalid state value', async () => {
     const airConditioner = await prisma.airConditioner.create({
       data: {
         model: 'Air-conditioner',
@@ -46,7 +46,7 @@ describe('AirConditionerStateController (e2e)', () => {
     expect(response.statusCode).toBe(400)
   })
 
-  it('should handle invalid id', async () => {
+  it('should handle updating air conditioner state with an invalid ID', async () => {
     const response = await request(app)
       .put('/air-conditioners/invalid-id/state')
       .send({ state: true })

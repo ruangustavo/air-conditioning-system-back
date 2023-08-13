@@ -1,3 +1,4 @@
+import { ResourceNotFound } from '@/errors'
 import { mqttClient } from '@/lib'
 import { type AirConditionerRepository } from '@/repositories'
 
@@ -10,6 +11,12 @@ export class AirConditionerStateService {
   ) {}
 
   updateState = async (id: number, state: boolean) => {
+    const existingAirConditioner = await this.airConditionerRepository.getOne(id)
+
+    if (existingAirConditioner == null) {
+      throw new ResourceNotFound()
+    }
+
     mqttClient.publish(
       `air-conditioner/${id}/state`,
       state ? TURN_ON_COMMAND : TURN_OFF_COMMAND

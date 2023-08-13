@@ -1,5 +1,6 @@
 import { type Request, type Response } from 'express'
 import { type AirConditionerService } from '@/services'
+import { ResourceNotFound } from '@/errors'
 
 /**
  * This controller is responsible for handling the requests for the air-conditioners.
@@ -16,8 +17,15 @@ export class AirConditionerController {
 
   getOneAirConditioner = async (req: Request, res: Response) => {
     const id = Number(req.params.id)
-    const airConditioner = await this.airConditionerService.getOne(id)
-    res.json(airConditioner)
+
+    try {
+      const airConditioner = await this.airConditionerService.getOne(id)
+      res.json(airConditioner)
+    } catch (error) {
+      if (error instanceof ResourceNotFound) {
+        res.status(404).json({ error: error.message })
+      }
+    }
   }
 
   createAirConditioner = async (req: Request, res: Response) => {
@@ -31,16 +39,27 @@ export class AirConditionerController {
   updateOneAirConditioner = async (req: Request, res: Response) => {
     const id = Number(req.params.id)
     const airConditioner = req.validatedData
-    const updatedAirConditioner = await this.airConditionerService.update(
-      id,
-      airConditioner
-    )
-    res.json(updatedAirConditioner)
+
+    try {
+      const updatedAirConditioner = await this.airConditionerService.update(id, airConditioner)
+      res.json(updatedAirConditioner)
+    } catch (error) {
+      if (error instanceof ResourceNotFound) {
+        res.status(404).json({ error: error.message })
+      }
+    }
   }
 
   deleteOneAirConditioner = async (req: Request, res: Response) => {
     const id = Number(req.params.id)
-    const deletedAirConditioner = await this.airConditionerService.delete(id)
-    res.json(deletedAirConditioner)
+
+    try {
+      const deletedAirConditioner = await this.airConditionerService.delete(id)
+      res.json(deletedAirConditioner)
+    } catch (error) {
+      if (error instanceof ResourceNotFound) {
+        res.status(404).json({ error: error.message })
+      }
+    }
   }
 }

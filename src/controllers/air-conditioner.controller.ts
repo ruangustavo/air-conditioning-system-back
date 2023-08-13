@@ -1,6 +1,8 @@
 import { type Request, type Response } from 'express'
 import { type AirConditionerService } from '@/services'
 import { ResourceNotFound } from '@/errors'
+import { idSchema } from '@/schemas'
+import { ZodError } from 'zod'
 
 /**
  * This controller is responsible for handling the requests for the air-conditioners.
@@ -16,14 +18,15 @@ export class AirConditionerController {
   }
 
   getOneAirConditioner = async (req: Request, res: Response) => {
-    const id = Number(req.params.id)
-
     try {
+      const { id } = idSchema.parse(req.params)
       const airConditioner = await this.airConditionerService.getOne(id)
       res.json(airConditioner)
     } catch (error) {
       if (error instanceof ResourceNotFound) {
         res.status(404).json({ error: error.message })
+      } else if (error instanceof ZodError) {
+        res.status(400).json({ message: 'Validation error', error: error.format() })
       }
     }
   }

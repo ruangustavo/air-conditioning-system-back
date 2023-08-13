@@ -3,7 +3,7 @@ import express from 'express'
 import morgan from 'morgan'
 import { airConditionerRouter, airConditionerStateRouter } from './routes'
 
-const app = express()
+export const app = express()
 
 // Setting up middlewares
 app.use(express.json())

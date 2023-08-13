@@ -9,7 +9,12 @@ export const validateBodyRequest = (schema: ZodSchema) => {
       next()
     } catch (error: unknown) {
       if (error instanceof ZodError) {
-        res.status(400).json({ error: error.issues })
+        res.status(400).json({
+          message: 'Validation error',
+          issues: error.format()
+        })
+      } else {
+        next(error)
       }
     }
   }

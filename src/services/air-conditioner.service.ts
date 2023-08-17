@@ -1,11 +1,6 @@
-import { type AirConditioner } from '@prisma/client'
+import { type AirConditioner } from '@/models'
 import { type AirConditionerRepository } from '../repositories'
 import { ResourceNotFound } from '@/errors'
-
-/**
- * This service is responsible for handling the business logic for the air-conditioners.
- * It is used by the controllers to get the data from the database.
- */
 
 export class AirConditionerService {
   constructor (private readonly airConditionerRepository: AirConditionerRepository) {}

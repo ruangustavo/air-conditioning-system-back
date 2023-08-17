@@ -8,12 +8,27 @@ datasource db {
 }
 
 model AirConditioner {
-  id    Int    @id @default(autoincrement())
-  brand String
-  model String
-
-  updated_at DateTime @default(now())
-  created_at DateTime @default(now())
+  id         Int        @id @default(autoincrement())
+  brand      String
+  model      String
+  schedules  Schedule[]
+  updated_at DateTime   @default(now())
+  created_at DateTime   @default(now())
 
   @@map("air_conditioners")
+}
+
+model Schedule {
+  id                 Int            @id @default(autoincrement())
+  start_day_of_week  Int
+  end_day_of_week    Int?
+  is_recurrent       Boolean        @default(false)
+  hour               Int
+  minute             Int
+  air_conditioner_id Int
+  air_conditioner    AirConditioner @relation(fields: [air_conditioner_id], references: [id])
+  updated_at         DateTime       @default(now())
+  created_at         DateTime       @default(now())
+
+  @@map("schedules")
 }

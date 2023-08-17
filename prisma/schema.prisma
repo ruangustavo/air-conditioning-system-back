@@ -11,6 +11,7 @@ model AirConditioner {
   id         Int        @id @default(autoincrement())
   brand      String
   model      String
+  state      State[]
   schedules  Schedule[]
   updated_at DateTime   @default(now())
   created_at DateTime   @default(now())
@@ -18,8 +19,20 @@ model AirConditioner {
   @@map("air_conditioners")
 }
 
+model State {
+  id                 Int            @id @default(autoincrement())
+  state              Boolean
+  air_conditioner    AirConditioner @relation(fields: [air_conditioner_id], references: [id])
+  air_conditioner_id Int
+  updated_at         DateTime       @default(now())
+  created_at         DateTime       @default(now())
+
+  @@map("states")
+}
+
 model Schedule {
   id                 Int            @id @default(autoincrement())
+  state              Boolean
   start_day_of_week  Int
   end_day_of_week    Int?
   is_recurrent       Boolean        @default(false)

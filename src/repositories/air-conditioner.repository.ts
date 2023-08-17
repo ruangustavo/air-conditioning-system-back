@@ -1,4 +1,4 @@
-import { type AirConditioner } from '@prisma/client'
+import { type AirConditioner } from '@/models'
 
 export interface AirConditionerRepository {
   getAll: () => Promise<AirConditioner[]>

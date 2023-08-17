@@ -1,14 +1,8 @@
-import { type AirConditioner as AirConditionerEntity } from '@prisma/client'
+import { type AirConditioner } from '@/models'
 import { prisma } from '@/lib'
 import { type AirConditionerRepository } from './air-conditioner.repository'
 
-/**
- * This class is responsible for handling the database operations for the air-conditioners.
- * It is used by the services to get the data from the database.
- */
-
-export class PrismaAirConditionerRepository
-implements AirConditionerRepository {
+export class PrismaAirConditionerRepository implements AirConditionerRepository {
   getAll = async () => {
     const airConditioners = await prisma.airConditioner.findMany()
     return airConditioners
@@ -21,14 +15,14 @@ implements AirConditionerRepository {
     return await airConditioner
   }
 
-  create = async (airConditioner: AirConditionerEntity) => {
+  create = async (airConditioner: AirConditioner) => {
     const createdAirConditioner = await prisma.airConditioner.create({
       data: { ...airConditioner }
     })
     return createdAirConditioner
   }
 
-  update = async (id: number, airConditioner: AirConditionerEntity) => {
+  update = async (id: number, airConditioner: AirConditioner) => {
     const updatedAirConditioner = await prisma.airConditioner.update({
       where: { id },
       data: airConditioner

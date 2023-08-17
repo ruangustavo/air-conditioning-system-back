@@ -1,7 +1,7 @@
 import cors from 'cors'
 import express from 'express'
 import morgan from 'morgan'
-import { airConditionerRouter, airConditionerStateRouter } from './routes'
+import { airConditionerRouter, stateRouter } from './routes'
 import { errorHandler } from './middlewares/error-handler.middleware'
 
 export const app = express()
@@ -15,6 +15,6 @@ app.use(errorHandler)
 
 // Setting up routes
 app.use('/air-conditioners', airConditionerRouter)
-app.use('/air-conditioners', airConditionerStateRouter)
+app.use('/air-conditioners', stateRouter)
 
 export default app

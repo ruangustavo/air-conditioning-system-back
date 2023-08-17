@@ -1,5 +1,5 @@
 import { prisma } from '@/lib'
-import { type ScheduleRepository, type CreateScheduleData } from './schedule.repository'
+import { type ScheduleRepository, type CreateScheduleData } from '../interfaces/schedule.repository'
 
 export class PrismaScheduleRepository implements ScheduleRepository {
   create = async (airConditionerId: number, schedule: CreateScheduleData) => {

@@ -1,6 +1,6 @@
 import { type AirConditioner } from '@/models'
 import { prisma } from '@/lib'
-import { type AirConditionerRepository } from './air-conditioner.repository'
+import { type AirConditionerRepository } from './interfaces/air-conditioner.repository'
 
 export class PrismaAirConditionerRepository implements AirConditionerRepository {
   getAll = async () => {

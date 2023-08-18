@@ -8,13 +8,13 @@ datasource db {
 }
 
 model AirConditioner {
-  id         Int        @id @default(autoincrement())
-  brand      String
-  model      String
-  state      State[]
-  schedules  Schedule[]
-  updated_at DateTime   @default(now())
-  created_at DateTime   @default(now())
+  id           Int           @id @default(autoincrement())
+  brand        String
+  model        String
+  state        State[]
+  appointments Appointment[]
+  updated_at   DateTime      @default(now())
+  created_at   DateTime      @default(now())
 
   @@map("air_conditioners")
 }
@@ -30,7 +30,7 @@ model State {
   @@map("states")
 }
 
-model Schedule {
+model Appointment {
   id                 Int            @id @default(autoincrement())
   state              Boolean
   start_day_of_week  Int
@@ -43,5 +43,5 @@ model Schedule {
   updated_at         DateTime       @default(now())
   created_at         DateTime       @default(now())
 
-  @@map("schedules")
+  @@map("appointments")
 }

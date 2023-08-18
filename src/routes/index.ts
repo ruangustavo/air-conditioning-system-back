@@ -1,3 +1,3 @@
 export * from './air-conditioner.route'
 export * from './state.route'
-export * from './schedule.route'
+export * from './appointment.route'

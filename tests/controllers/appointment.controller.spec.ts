@@ -4,7 +4,7 @@ import { type AirConditioner } from '@/models'
 import request from 'supertest'
 import { describe, it, beforeEach, expect } from 'vitest'
 
-describe('[e2e] ScheduleController', () => {
+describe('[e2e] AppointmentController', () => {
   let airConditioner: AirConditioner
 
   beforeEach(async () => {
@@ -21,7 +21,7 @@ describe('[e2e] ScheduleController', () => {
     const currentHour = currentTime.getHours()
     const currentMinute = currentTime.getMinutes()
 
-    const scheduleData = {
+    const appointmentData = {
       start_day_of_week: 0,
       end_day_of_week: 6,
       is_recurrent: true,
@@ -31,23 +31,23 @@ describe('[e2e] ScheduleController', () => {
     }
 
     const response = await request(app)
-      .post(`/air-conditioners/${airConditioner.id}/schedule`)
-      .send(scheduleData)
+      .post(`/air-conditioners/${airConditioner.id}/appointment`)
+      .send(appointmentData)
 
-    const expectedSchedule = {
+    const expectedAppointment = {
       id: expect.any(Number),
-      ...scheduleData,
+      ...appointmentData,
       air_conditioner_id: airConditioner.id,
       created_at: expect.any(String),
       updated_at: expect.any(String)
     }
 
     expect(response.status).toBe(201)
-    expect(response.body.schedule).toMatchObject(expectedSchedule)
+    expect(response.body.appointment).toMatchObject(expectedAppointment)
   })
 
   it('should return 400 if start_day_of_week is greater than end_day_of_week', async () => {
-    const invalidScheduleData = {
+    const invalidAppointmentData = {
       start_day_of_week: 6,
       end_day_of_week: 0,
       is_recurrent: true,
@@ -57,14 +57,14 @@ describe('[e2e] ScheduleController', () => {
     }
 
     const response = await request(app)
-      .post(`/air-conditioners/${airConditioner.id}/schedule`)
-      .send(invalidScheduleData)
+      .post(`/air-conditioners/${airConditioner.id}/appointment`)
+      .send(invalidAppointmentData)
 
     expect(response.status).toBe(400)
   })
 
   it('should return 400 if hour is out of range (0-23)', async () => {
-    const invalidScheduleData = {
+    const invalidAppointmentData = {
       start_day_of_week: 1,
       end_day_of_week: 1,
       is_recurrent: true,
@@ -74,14 +74,14 @@ describe('[e2e] ScheduleController', () => {
     }
 
     const response = await request(app)
-      .post(`/air-conditioners/${airConditioner.id}/schedule`)
-      .send(invalidScheduleData)
+      .post(`/air-conditioners/${airConditioner.id}/appointment`)
+      .send(invalidAppointmentData)
 
     expect(response.status).toBe(400)
   })
 
   it('should return 400 if minute is out of range (0-59)', async () => {
-    const invalidScheduleData = {
+    const invalidAppointmentData = {
       start_day_of_week: 1,
       end_day_of_week: 1,
       is_recurrent: true,
@@ -91,8 +91,8 @@ describe('[e2e] ScheduleController', () => {
     }
 
     const response = await request(app)
-      .post(`/air-conditioners/${airConditioner.id}/schedule`)
-      .send(invalidScheduleData)
+      .post(`/air-conditioners/${airConditioner.id}/appointment`)
+      .send(invalidAppointmentData)
 
     expect(response.status).toBe(400)
   })

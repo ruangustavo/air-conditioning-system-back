@@ -2,6 +2,8 @@ import { type CreateScheduleData, type ScheduleRepository } from '@/repositories
 import * as scheduler from 'node-schedule'
 import { type StateService } from './state.service'
 
+const DEFAULT_TIMEZONE = 'America/Sao_Paulo'
+
 export class ScheduleService {
   constructor (
     private readonly scheduleRepository: ScheduleRepository,
@@ -22,10 +24,11 @@ export class ScheduleService {
   }
 
   private readonly getSchedulingRule = (schedule: CreateScheduleData) => {
-    const schedulingRule = new scheduler.RecurrenceRule()
-    schedulingRule.dayOfWeek = new scheduler.Range(schedule.start_day_of_week, schedule.end_day_of_week ?? schedule.start_day_of_week)
-    schedulingRule.hour = schedule.hour
-    schedulingRule.minute = schedule.minute
-    return schedulingRule
+    const rule = new scheduler.RecurrenceRule()
+    rule.dayOfWeek = new scheduler.Range(schedule.start_day_of_week, schedule.end_day_of_week ?? schedule.start_day_of_week)
+    rule.hour = schedule.hour
+    rule.minute = schedule.minute
+    rule.tz = DEFAULT_TIMEZONE
+    return rule
   }
 }

@@ -29,13 +29,13 @@ airConditionerRouter
 
 airConditionerRouter
   .route('/:id')
-  .get(airConditionerController.getOneAirConditioner)
+  .get(airConditionerController.getAirConditionerById)
   .put(
     validateBodyRequest(updateAirConditionerSchema),
-    airConditionerController.updateOneAirConditioner
+    airConditionerController.updateAirConditioner
   )
   .delete(
-    airConditionerController.deleteOneAirConditioner
+    airConditionerController.deleteAirConditioner
   )
 
 export default airConditionerRouter

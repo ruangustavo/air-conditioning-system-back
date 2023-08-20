@@ -1,6 +1,6 @@
 import { app } from '@/app'
 import { prisma } from '@/lib'
-import { type AirConditioner } from '@/models'
+import { type AirConditioner } from '@prisma/client'
 import request from 'supertest'
 import { describe, it, beforeEach, expect } from 'vitest'
 

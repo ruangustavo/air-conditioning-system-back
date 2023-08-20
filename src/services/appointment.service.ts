@@ -1,6 +1,7 @@
-import { type CreateAppointmentData, type AppointmentRepository } from '@/repositories'
+import { type AppointmentRepository } from '@/repositories'
 import * as scheduler from 'node-schedule'
 import { type StateService } from './state.service'
+import { type Prisma } from '@prisma/client'
 
 const DEFAULT_TIMEZONE = 'America/Sao_Paulo'
 
@@ -10,8 +11,8 @@ export class AppointmentService {
     private readonly stateService: StateService
   ) {}
 
-  create = async (airConditionerId: number, appointment: CreateAppointmentData) => {
-    const createdAppointment = await this.appointmentRepository.create(airConditionerId, appointment)
+  createAppointment = async (airConditionerId: number, appointment: Prisma.AppointmentCreateInput) => {
+    const createdAppointment = await this.appointmentRepository.createAppointment(airConditionerId, appointment)
     const schedulingRule = this.getSchedulingRule(appointment)
     const { state } = appointment
 
@@ -23,7 +24,7 @@ export class AppointmentService {
     return createdAppointment
   }
 
-  private readonly getSchedulingRule = (appointment: CreateAppointmentData) => {
+  private readonly getSchedulingRule = (appointment: Prisma.AppointmentCreateInput) => {
     const rule = new scheduler.RecurrenceRule()
     rule.dayOfWeek = new scheduler.Range(appointment.start_day_of_week, appointment.end_day_of_week ?? appointment.start_day_of_week)
     rule.hour = appointment.hour

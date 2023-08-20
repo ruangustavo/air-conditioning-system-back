@@ -9,7 +9,7 @@ export class AppointmentController {
   createAppointment = async (req: Request, res: Response) => {
     try {
       const { id } = idSchema.parse(req.params)
-      const createdAppointment = await this.appointmentService.create(id, req.validatedData)
+      const createdAppointment = await this.appointmentService.createAppointment(id, req.validatedData)
       res.status(201).json({ appointment: createdAppointment })
     } catch (error) {
       if (error instanceof ZodError) {

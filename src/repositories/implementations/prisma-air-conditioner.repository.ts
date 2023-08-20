@@ -1,28 +1,28 @@
-import { type AirConditioner } from '@/models'
 import { prisma } from '@/lib'
 import { type AirConditionerRepository } from '../interfaces/air-conditioner.repository'
+import { type Prisma } from '@prisma/client'
 
 export class PrismaAirConditionerRepository implements AirConditionerRepository {
-  getAll = async () => {
+  getAllAirConditioners = async () => {
     const airConditioners = await prisma.airConditioner.findMany()
     return airConditioners
   }
 
-  getOne = async (id: number) => {
+  getAirConditionerById = async (id: number) => {
     const airConditioner = prisma.airConditioner.findUnique({
       where: { id }
     })
     return await airConditioner
   }
 
-  create = async (airConditioner: AirConditioner) => {
+  createAirConditioner = async (airConditioner: Prisma.AirConditionerCreateInput) => {
     const createdAirConditioner = await prisma.airConditioner.create({
       data: { ...airConditioner }
     })
     return createdAirConditioner
   }
 
-  update = async (id: number, airConditioner: AirConditioner) => {
+  updateAirConditioner = async (id: number, airConditioner: Prisma.AirConditionerUpdateInput) => {
     const updatedAirConditioner = await prisma.airConditioner.update({
       where: { id },
       data: airConditioner
@@ -30,10 +30,10 @@ export class PrismaAirConditionerRepository implements AirConditionerRepository 
     return updatedAirConditioner
   }
 
-  delete = async (id: number) => {
+  deleteAirConditioner = async (id: number) => {
     const deletedAirConditioner = await prisma.airConditioner.delete({
       where: { id }
     })
-    return deletedAirConditioner
+    return deletedAirConditioner !== null
   }
 }

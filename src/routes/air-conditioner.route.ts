@@ -1,41 +1,39 @@
 import express from 'express'
 import { AirConditionerController } from '../controllers'
-
 import { validateBodyRequest } from '../middlewares'
 import { PrismaAirConditionerRepository } from '../repositories'
 import {
   createAirConditionerSchema,
-  updateAirConditionerSchema
+  updateAirConditionerSchema,
+  updateAirConditionerStateSchema
 } from '../schemas'
 import { AirConditionerService } from '../services'
 
 export const airConditionerRouter = express.Router()
 
-const prismaAirConditionerRepository = new PrismaAirConditionerRepository()
-const airConditionerService = new AirConditionerService(
-  prismaAirConditionerRepository
-)
-const airConditionerController = new AirConditionerController(
-  airConditionerService
-)
+const repository = new PrismaAirConditionerRepository()
+const service = new AirConditionerService(repository)
+const controller = new AirConditionerController(service)
 
 airConditionerRouter
   .route('/')
-  .get(airConditionerController.getAllAirConditioners)
+  .get(controller.getAllAirConditioners)
   .post(
     validateBodyRequest(createAirConditionerSchema),
-    airConditionerController.createAirConditioner
+    controller.createAirConditioner
   )
 
 airConditionerRouter
   .route('/:id')
-  .get(airConditionerController.getAirConditionerById)
+  .get(controller.getAirConditionerById)
   .put(
     validateBodyRequest(updateAirConditionerSchema),
-    airConditionerController.updateAirConditioner
+    controller.updateAirConditioner
   )
   .delete(
-    airConditionerController.deleteAirConditioner
+    controller.deleteAirConditioner
   )
 
-export default airConditionerRouter
+airConditionerRouter
+  .route('/:id/state')
+  .put(validateBodyRequest(updateAirConditionerStateSchema), controller.updateAirConditionerState)

@@ -1,6 +1,5 @@
-import { type AppointmentRepository } from '@/repositories'
+import { type AirConditionerRepository, type AppointmentRepository } from '@/repositories'
 import * as scheduler from 'node-schedule'
-import { type StateService } from './state.service'
 import { type Prisma } from '@prisma/client'
 
 const DEFAULT_TIMEZONE = 'America/Sao_Paulo'
@@ -8,7 +7,7 @@ const DEFAULT_TIMEZONE = 'America/Sao_Paulo'
 export class AppointmentService {
   constructor (
     private readonly appointmentRepository: AppointmentRepository,
-    private readonly stateService: StateService
+    private readonly airConditionerRepository: AirConditionerRepository
   ) {}
 
   createAppointment = async (airConditionerId: number, appointment: Prisma.AppointmentCreateInput) => {
@@ -17,7 +16,7 @@ export class AppointmentService {
     const { state } = appointment
 
     scheduler.scheduleJob(schedulingRule, async () => {
-      await this.stateService.updateAirConditionerState(airConditionerId, { state })
+      await this.airConditionerRepository.updateAirConditionerState(airConditionerId, state)
       console.log(`Scheduled task executed: Turn on air conditioner ${airConditionerId}`)
     })
 

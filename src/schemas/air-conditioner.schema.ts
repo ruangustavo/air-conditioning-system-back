@@ -6,3 +6,7 @@ export const createAirConditionerSchema = z.object({
 })
 
 export const updateAirConditionerSchema = createAirConditionerSchema.partial()
+
+export const updateAirConditionerStateSchema = z.object({
+  state: z.boolean()
+})

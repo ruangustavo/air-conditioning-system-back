@@ -17,16 +17,12 @@ describe('[e2e] AppointmentController', () => {
   })
 
   it('should schedule an air-conditioner turn on with valid data', async () => {
-    const currentTime = new Date()
-    const currentHour = currentTime.getHours()
-    const currentMinute = currentTime.getMinutes()
-
     const appointmentData = {
-      start_day_of_week: 0,
-      end_day_of_week: 6,
+      start_day_of_week: 1,
+      end_day_of_week: 1,
       is_recurrent: true,
-      hour: currentHour,
-      minute: currentMinute,
+      hour: 12,
+      minute: 0,
       state: true
     }
 

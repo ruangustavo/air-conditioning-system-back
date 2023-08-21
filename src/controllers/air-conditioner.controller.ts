@@ -60,4 +60,18 @@ export class AirConditionerController {
       }
     }
   }
+
+  updateAirConditionerState = async (req: Request, res: Response) => {
+    const id = Number(req.params.id)
+    const { state } = req.validatedData
+
+    try {
+      const updatedAirConditioner = await this.airConditionerService.updateAirConditionerState(id, state)
+      res.json(updatedAirConditioner)
+    } catch (error) {
+      if (error instanceof ResourceNotFound) {
+        res.status(404).json({ error: error.message })
+      }
+    }
+  }
 }

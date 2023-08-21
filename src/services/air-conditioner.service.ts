@@ -1,13 +1,19 @@
-import { type AirConditioner } from '@prisma/client'
-import { type AirConditionerRepository } from '../repositories'
+import { type Prisma } from '@prisma/client'
+import { type AirConditionerUpdateWithoutIsActive, type AirConditionerRepository } from '../repositories'
 import { ResourceNotFound } from '@/errors'
+import { mqttClient } from '@/lib'
+
+const AIR_CONDITIONER_STATE_COMMANDS = {
+  ON: '1',
+  OFF: '2'
+}
 
 export class AirConditionerService {
   constructor (private readonly airConditionerRepository: AirConditionerRepository) {}
 
   getAllAirConditioners = async () => {
-    const airConditioners = this.airConditionerRepository.getAllAirConditioners()
-    return await airConditioners
+    const airConditioners = await this.airConditionerRepository.getAllAirConditioners()
+    return airConditioners
   }
 
   getAirConditionerById = async (id: number) => {
@@ -20,12 +26,12 @@ export class AirConditionerService {
     return airConditioner
   }
 
-  createAirConditioner = async (airConditioner: AirConditioner) => {
+  createAirConditioner = async (airConditioner: Prisma.AirConditionerCreateInput) => {
     const airConditionerCreated = await this.airConditionerRepository.createAirConditioner(airConditioner)
     return airConditionerCreated
   }
 
-  updateAirConditioner = async (id: number, airConditioner: AirConditioner) => {
+  updateAirConditioner = async (id: number, airConditioner: AirConditionerUpdateWithoutIsActive) => {
     const existingAirConditioner = await this.airConditionerRepository.getAirConditionerById(id)
 
     if (existingAirConditioner == null) {
@@ -45,5 +51,22 @@ export class AirConditionerService {
 
     const deletedAirConditioner = await this.airConditionerRepository.deleteAirConditioner(id)
     return deletedAirConditioner
+  }
+
+  updateAirConditionerState = async (id: number, state: boolean) => {
+    const existingAirConditioner = await this.airConditionerRepository.getAirConditionerById(id)
+
+    if (existingAirConditioner == null) {
+      throw new ResourceNotFound()
+    }
+
+    const updatedAirConditioner = await this.airConditionerRepository.updateAirConditionerState(id, state)
+
+    mqttClient.publish(
+      `air-conditioner/${id}/state`,
+      state ? AIR_CONDITIONER_STATE_COMMANDS.ON : AIR_CONDITIONER_STATE_COMMANDS.OFF
+    )
+
+    return updatedAirConditioner
   }
 }

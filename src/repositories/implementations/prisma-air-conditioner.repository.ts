@@ -9,10 +9,10 @@ export class PrismaAirConditionerRepository implements AirConditionerRepository 
   }
 
   getAirConditionerById = async (id: number) => {
-    const airConditioner = prisma.airConditioner.findUnique({
+    const airConditioner = await prisma.airConditioner.findUnique({
       where: { id }
     })
-    return await airConditioner
+    return airConditioner
   }
 
   createAirConditioner = async (airConditioner: Prisma.AirConditionerCreateInput) => {
@@ -35,5 +35,13 @@ export class PrismaAirConditionerRepository implements AirConditionerRepository 
       where: { id }
     })
     return deletedAirConditioner !== null
+  }
+
+  updateAirConditionerState = async (id: number, state: boolean) => {
+    const updatedAirConditioner = await prisma.airConditioner.update({
+      where: { id },
+      data: { is_active: state }
+    })
+    return updatedAirConditioner
   }
 }

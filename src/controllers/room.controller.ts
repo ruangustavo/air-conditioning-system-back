@@ -7,7 +7,7 @@ export class RoomController {
 
   createRoom = async (req: Request, res: Response) => {
     const createdRoom = await this.roomService.createRoom(req.body)
-    return res.status(201).json(createdRoom)
+    return res.status(201).json({ room: createdRoom })
   }
 
   addAirConditionerToRoom = async (req: Request, res: Response) => {
@@ -24,7 +24,7 @@ export class RoomController {
 
     const { id: roomId } = parsedParams.data
     const airConditioner = await this.roomService.addAirConditionerToRoom(roomId, req.validatedData)
-    return res.status(201).json(airConditioner)
+    return res.status(201).json({ air_conditioner: airConditioner })
   }
 
   getAirConditionersFromRoom = async (req: Request, res: Response) => {
@@ -41,6 +41,6 @@ export class RoomController {
 
     const { id: roomId } = parsedParams.data
     const airConditioners = await this.roomService.getAirConditionersFromRoom(roomId)
-    return res.status(200).json(airConditioners)
+    return res.status(200).json({ air_conditioners: airConditioners })
   }
 }

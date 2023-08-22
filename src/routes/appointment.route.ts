@@ -15,7 +15,7 @@ const service = new AppointmentService(appointmentRepository, airConditionerRepo
 const controller = new AppointmentController(service)
 
 appointmentRouter
-  .route('/rooms/:id/appointment')
+  .route('/rooms/:id/appointments')
   .post(
     validateBodyRequest(createAppointmentSchema),
     controller.createAppointment

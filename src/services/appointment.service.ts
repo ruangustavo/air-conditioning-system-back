@@ -1,4 +1,4 @@
-import { type AirConditionerRepository, type AppointmentRepository } from '@/repositories'
+import { type RoomRepository, type AppointmentRepository, type AirConditionerRepository } from '@/repositories'
 import * as scheduler from 'node-schedule'
 import { type Prisma } from '@prisma/client'
 
@@ -7,17 +7,21 @@ const DEFAULT_TIMEZONE = 'America/Sao_Paulo'
 export class AppointmentService {
   constructor (
     private readonly appointmentRepository: AppointmentRepository,
-    private readonly airConditionerRepository: AirConditionerRepository
+    private readonly airConditionerRepository: AirConditionerRepository,
+    private readonly roomRepository: RoomRepository
   ) {}
 
-  createAppointment = async (airConditionerId: number, appointment: Prisma.AppointmentCreateInput) => {
-    const createdAppointment = await this.appointmentRepository.createAppointment(airConditionerId, appointment)
+  createAppointment = async (roomId: number, appointment: Prisma.AppointmentCreateInput) => {
+    const createdAppointment = await this.appointmentRepository.createAppointment(roomId, appointment)
     const schedulingRule = this.getSchedulingRule(appointment)
-    const { state } = appointment
 
     scheduler.scheduleJob(schedulingRule, async () => {
-      await this.airConditionerRepository.updateAirConditionerState(airConditionerId, state)
-      console.log(`Scheduled task executed: Turn on air conditioner ${airConditionerId}`)
+      const airConditioners = await this.roomRepository.getAirConditionersFromRoom(roomId)
+
+      for (const airConditioner of airConditioners) {
+        await this.airConditionerRepository.updateAirConditionerState(airConditioner.id, appointment.state)
+        console.log(`Air conditioner ${airConditioner.id} updated to ${appointment.state ? 'on' : 'off'}`)
+      }
     })
 
     return createdAppointment

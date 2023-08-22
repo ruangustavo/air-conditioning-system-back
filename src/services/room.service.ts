@@ -13,4 +13,9 @@ export class RoomService {
     const createdAirConditioner = await this.roomRepository.addAirConditionerToRoom(roomId, airConditioner)
     return createdAirConditioner
   }
+
+  getAirConditionersFromRoom = async (roomId: number) => {
+    const airConditioners = await this.roomRepository.getAirConditionersFromRoom(roomId)
+    return airConditioners
+  }
 }

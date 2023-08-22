@@ -21,4 +21,13 @@ export class PrismaRoomRepository implements RoomRepository {
     })
     return createdAirConditioner
   }
+
+  getAirConditionersFromRoom = async (roomId: number) => {
+    const airConditioners = await prisma.airConditioner.findMany({
+      where: {
+        room_id: roomId
+      }
+    })
+    return airConditioners
+  }
 }

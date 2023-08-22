@@ -26,4 +26,21 @@ export class RoomController {
     const airConditioner = await this.roomService.addAirConditionerToRoom(roomId, req.validatedData)
     return res.status(201).json(airConditioner)
   }
+
+  getAirConditionersFromRoom = async (req: Request, res: Response) => {
+    const parsedParams = idSchema.safeParse(req.params)
+
+    if (!parsedParams.success) {
+      return res.status(400).json(
+        {
+          message: 'Validation error',
+          error: parsedParams.error.format()
+        }
+      )
+    }
+
+    const { id: roomId } = parsedParams.data
+    const airConditioners = await this.roomService.getAirConditionersFromRoom(roomId)
+    return res.status(200).json(airConditioners)
+  }
 }

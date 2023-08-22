@@ -17,6 +17,11 @@ roomRouter.post(
   controller.createRoom
 )
 
+roomRouter.get(
+  '/:id/air-conditioners',
+  controller.getAirConditionersFromRoom
+)
+
 roomRouter.post(
   '/:id/air-conditioners',
   validateBodyRequest(createAirConditionerSchema),

@@ -3,13 +3,13 @@ import { type AppointmentRepository } from '../interfaces/appointment.repository
 import { type Prisma } from '@prisma/client'
 
 export class PrismaAppointmentRepository implements AppointmentRepository {
-  createAppointment = async (airConditionerId: number, appointment: Prisma.AppointmentCreateInput) => {
+  createAppointment = async (roomId: number, appointment: Prisma.AppointmentCreateInput) => {
     const createdAppointment = await prisma.appointment.create({
       data: {
         ...appointment,
-        air_conditioner: {
+        room: {
           connect: {
-            id: airConditionerId
+            id: roomId
           }
         }
       }

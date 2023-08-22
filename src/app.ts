@@ -16,7 +16,5 @@ app.use(errorHandler)
 
 // Setting up routes
 app.use('/air-conditioners', airConditionerRouter)
-app.use('/air-conditioners', appointmentRouter)
 app.use('/rooms', roomRouter)
-
-export default app
+app.use('/rooms', appointmentRouter)

@@ -15,11 +15,11 @@ const service = new AirConditionerService(repository)
 const controller = new AirConditionerController(service)
 
 airConditionerRouter
-  .route('/')
+  .route('/air-conditioners')
   .get(controller.getAllAirConditioners)
 
 airConditionerRouter
-  .route('/:id')
+  .route('/air-conditioners/:id')
   .get(controller.getAirConditionerById)
   .put(
     validateBodyRequest(updateAirConditionerSchema),
@@ -30,5 +30,5 @@ airConditionerRouter
   )
 
 airConditionerRouter
-  .route('/:id/state')
+  .route('/air-conditioners/:id/state')
   .put(validateBodyRequest(updateAirConditionerStateSchema), controller.updateAirConditionerState)

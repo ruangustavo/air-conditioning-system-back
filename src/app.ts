@@ -15,6 +15,6 @@ app.use(cors())
 app.use(errorHandler)
 
 // Setting up routes
-app.use('/air-conditioners', airConditionerRouter)
-app.use('/rooms', roomRouter)
-app.use('/rooms', appointmentRouter)
+app.use(airConditionerRouter)
+app.use(roomRouter)
+app.use(appointmentRouter)

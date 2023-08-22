@@ -12,18 +12,18 @@ const service = new RoomService(repository)
 const controller = new RoomController(service)
 
 roomRouter.post(
-  '/',
+  '/rooms',
   validateBodyRequest(createRoomSchema),
   controller.createRoom
 )
 
 roomRouter.get(
-  '/:id/air-conditioners',
+  '/rooms/:id/air-conditioners',
   controller.getAirConditionersFromRoom
 )
 
 roomRouter.post(
-  '/:id/air-conditioners',
+  '/rooms/:id/air-conditioners',
   validateBodyRequest(createAirConditionerSchema),
   controller.addAirConditionerToRoom
 )

@@ -1,4 +1,3 @@
-import { type Prisma } from '@prisma/client'
 import { type AirConditionerUpdateWithoutIsActive, type AirConditionerRepository } from '../repositories'
 import { ResourceNotFound } from '@/errors'
 import { mqttClient } from '@/lib'
@@ -24,11 +23,6 @@ export class AirConditionerService {
     }
 
     return airConditioner
-  }
-
-  createAirConditioner = async (airConditioner: Prisma.AirConditionerCreateInput) => {
-    const airConditionerCreated = await this.airConditionerRepository.createAirConditioner(airConditioner)
-    return airConditionerCreated
   }
 
   updateAirConditioner = async (id: number, airConditioner: AirConditionerUpdateWithoutIsActive) => {

@@ -15,13 +15,6 @@ export class PrismaAirConditionerRepository implements AirConditionerRepository 
     return airConditioner
   }
 
-  createAirConditioner = async (airConditioner: Prisma.AirConditionerCreateInput) => {
-    const createdAirConditioner = await prisma.airConditioner.create({
-      data: { ...airConditioner }
-    })
-    return createdAirConditioner
-  }
-
   updateAirConditioner = async (id: number, airConditioner: Prisma.AirConditionerUpdateInput) => {
     const updatedAirConditioner = await prisma.airConditioner.update({
       where: { id },

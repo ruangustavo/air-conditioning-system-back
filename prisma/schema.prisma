@@ -7,14 +7,27 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Room {
+  id              Int              @id @default(autoincrement())
+  name            String
+  description     String?
+  air_conditioner AirConditioner[]
+  updated_at      DateTime         @default(now())
+  created_at      DateTime         @default(now())
+
+  @@map("rooms")
+}
+
 model AirConditioner {
   id           Int           @id @default(autoincrement())
   brand        String
   model        String
   is_active    Boolean?      @default(false)
+  room         Room          @relation(fields: [room_id], references: [id])
   appointments Appointment[]
   updated_at   DateTime      @default(now())
   created_at   DateTime      @default(now())
+  room_id      Int
 
   @@map("air_conditioners")
 }

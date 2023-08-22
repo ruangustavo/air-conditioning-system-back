@@ -3,7 +3,6 @@ import { AirConditionerController } from '../controllers'
 import { validateBodyRequest } from '../middlewares'
 import { PrismaAirConditionerRepository } from '../repositories'
 import {
-  createAirConditionerSchema,
   updateAirConditionerSchema,
   updateAirConditionerStateSchema
 } from '../schemas'
@@ -18,10 +17,6 @@ const controller = new AirConditionerController(service)
 airConditionerRouter
   .route('/')
   .get(controller.getAllAirConditioners)
-  .post(
-    validateBodyRequest(createAirConditionerSchema),
-    controller.createAirConditioner
-  )
 
 airConditionerRouter
   .route('/:id')

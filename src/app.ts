@@ -3,6 +3,7 @@ import express from 'express'
 import morgan from 'morgan'
 import { airConditionerRouter, appointmentRouter } from './routes'
 import { errorHandler } from './middlewares'
+import { roomRouter } from './routes/room.route'
 
 export const app = express()
 
@@ -16,5 +17,6 @@ app.use(errorHandler)
 // Setting up routes
 app.use('/air-conditioners', airConditionerRouter)
 app.use('/air-conditioners', appointmentRouter)
+app.use('/rooms', roomRouter)
 
 export default app

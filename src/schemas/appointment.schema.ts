@@ -8,6 +8,3 @@ export const createAppointmentSchema = z.object({
   minute: z.number().min(1).max(59),
   state: z.boolean()
 })
-  .refine(data => data.end_day_of_week === undefined || data.end_day_of_week >= data.start_day_of_week, {
-    message: '"end_day_of_week" must be greater than or equal to "start_day_of_week"'
-  })

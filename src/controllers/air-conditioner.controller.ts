@@ -8,7 +8,7 @@ export class AirConditionerController {
 
   getAllAirConditioners = async (_req: Request, res: Response) => {
     const airConditioners = await this.airConditionerService.getAllAirConditioners()
-    res.json(airConditioners)
+    res.json({ air_conditioners: airConditioners })
   }
 
   getAirConditionerById = async (req: Request, res: Response) => {
@@ -26,7 +26,7 @@ export class AirConditionerController {
 
     try {
       const airConditioner = await this.airConditionerService.getAirConditionerById(id)
-      res.json(airConditioner)
+      res.json({ air_conditioner: airConditioner })
     } catch (error) {
       if (error instanceof ResourceNotFound) {
         res.status(404).json({ error: error.message })
@@ -48,8 +48,8 @@ export class AirConditionerController {
     const { id } = parsedParams.data
 
     try {
-      const updatedAirConditioner = await this.airConditionerService.updateAirConditioner(id, airConditioner)
-      res.json(updatedAirConditioner)
+      const updatedAirConditioner = await this.airConditionerService.updateAirConditioner(id, req.validatedData)
+      res.json({ air_conditioner: updatedAirConditioner })
     } catch (error) {
       if (error instanceof ResourceNotFound) {
         res.status(404).json({ error: error.message })
@@ -72,7 +72,7 @@ export class AirConditionerController {
 
     try {
       const deletedAirConditioner = await this.airConditionerService.deleteAirConditioner(id)
-      res.json(deletedAirConditioner)
+      res.json({ air_conditioner: deletedAirConditioner })
     } catch (error) {
       if (error instanceof ResourceNotFound) {
         res.status(404).json({ error: error.message })
@@ -96,7 +96,7 @@ export class AirConditionerController {
 
     try {
       const updatedAirConditioner = await this.airConditionerService.updateAirConditionerState(id, state)
-      res.json(updatedAirConditioner)
+      res.json({ air_conditioner: updatedAirConditioner })
     } catch (error) {
       if (error instanceof ResourceNotFound) {
         res.status(404).json({ error: error.message })

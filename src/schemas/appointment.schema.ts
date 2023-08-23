@@ -5,6 +5,6 @@ export const createAppointmentSchema = z.object({
   end_day_of_week: z.number().min(0).max(6).optional(),
   is_recurrent: z.boolean(),
   hour: z.number().min(0).max(23),
-  minute: z.number().min(1).max(59),
+  minute: z.number().min(0).max(59),
   state: z.boolean()
 })

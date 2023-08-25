@@ -8,13 +8,13 @@ datasource db {
 }
 
 model Room {
-  id              Int              @id @default(autoincrement())
-  name            String
-  description     String?
-  air_conditioner AirConditioner[]
-  updated_at      DateTime         @default(now())
-  created_at      DateTime         @default(now())
-  appointments    Appointment[]
+  id               Int              @id @default(autoincrement())
+  name             String           @unique
+  description      String?
+  air_conditioners AirConditioner[]
+  updated_at       DateTime         @default(now())
+  created_at       DateTime         @default(now())
+  appointments     Appointment[]
 
   @@map("rooms")
 }

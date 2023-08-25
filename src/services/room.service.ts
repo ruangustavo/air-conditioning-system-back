@@ -4,6 +4,11 @@ import { type Prisma } from '@prisma/client'
 export class RoomService {
   constructor (private readonly roomRepository: RoomRepository) {}
 
+  getRooms = async () => {
+    const rooms = await this.roomRepository.getRooms()
+    return rooms
+  }
+
   createRoom = async (room: Prisma.RoomCreateInput) => {
     const createdRoom = await this.roomRepository.createRoom(room)
     return createdRoom

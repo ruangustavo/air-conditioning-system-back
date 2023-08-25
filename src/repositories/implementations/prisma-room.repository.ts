@@ -3,6 +3,15 @@ import { type RoomRepository } from '../interfaces/room.repository'
 import { prisma } from '@/lib'
 
 export class PrismaRoomRepository implements RoomRepository {
+  getRooms = async () => {
+    const rooms = await prisma.room.findMany({
+      include: {
+        air_conditioners: true
+      }
+    })
+    return rooms
+  }
+
   createRoom = async (room: Prisma.RoomCreateInput) => {
     const createdRoom = await prisma.room.create({ data: room })
     return createdRoom

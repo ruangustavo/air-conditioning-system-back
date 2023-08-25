@@ -11,6 +11,8 @@ const repository = new PrismaRoomRepository()
 const service = new RoomService(repository)
 const controller = new RoomController(service)
 
+roomRouter.get('/rooms', controller.getRooms)
+
 roomRouter.post(
   '/rooms',
   validateBodyRequest(createRoomSchema),

@@ -12,6 +12,18 @@ export class PrismaRoomRepository implements RoomRepository {
     return rooms
   }
 
+  getRoomById = async (id: number) => {
+    const room = await prisma.room.findUnique({
+      where: {
+        id
+      },
+      include: {
+        air_conditioners: true
+      }
+    })
+    return room
+  }
+
   createRoom = async (room: Prisma.RoomCreateInput) => {
     const createdRoom = await prisma.room.create({ data: room })
     return createdRoom

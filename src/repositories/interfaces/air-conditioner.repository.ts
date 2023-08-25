@@ -1,9 +1,11 @@
-import { type AirConditioner } from '@/models'
+import { type Prisma, type AirConditioner } from '@prisma/client'
+
+export type AirConditionerUpdateWithoutIsActive = Omit<Prisma.AirConditionerUpdateInput, 'is_active'>
 
 export interface AirConditionerRepository {
-  getAll: () => Promise<AirConditioner[]>
-  getOne: (id: number) => Promise<AirConditioner | null>
-  create: (airConditioner: AirConditioner) => Promise<AirConditioner>
-  update: (id: number, airConditioner: AirConditioner) => Promise<AirConditioner>
-  delete: (id: number) => Promise<AirConditioner>
+  getAllAirConditioners: () => Promise<AirConditioner[]>
+  getAirConditionerById: (id: number) => Promise<AirConditioner | null>
+  updateAirConditioner: (id: number, airConditioner: AirConditionerUpdateWithoutIsActive) => Promise<AirConditioner>
+  deleteAirConditioner: (id: number) => Promise<boolean>
+  updateAirConditionerState: (id: number, state: boolean) => Promise<AirConditioner>
 }

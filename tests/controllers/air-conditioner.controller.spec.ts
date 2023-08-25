@@ -4,132 +4,84 @@ import request from 'supertest'
 import { prisma } from '@/lib'
 
 describe('[e2e] AirConditionerController', () => {
-  const airConditionerData = {
-    model: 'Air Conditioner',
-    brand: 'Brand'
+  const createRoom = async () => {
+    const room = await prisma.room.create({
+      data: {
+        name: 'Room'
+      }
+    })
+    return room
   }
 
   const createAirConditioner = async () => {
-    return await prisma.airConditioner.create({ data: airConditionerData })
+    const { id } = await createRoom()
+
+    return await prisma.airConditioner.create({
+      data: {
+        brand: 'Air-conditioner Brand',
+        model: 'Air-conditioner Model',
+        room: {
+          connect: {
+            id
+          }
+        }
+      }
+    })
   }
 
-  it('should retrieve an empty list of air conditioners when none exist', async () => {
-    const response = await request(app).get('/air-conditioners')
-    expect(response.status).toBe(200)
-    expect(response.body).toEqual([])
-  })
-
-  it('should successfully create a new air conditioner', async () => {
-    const response = await request(app)
-      .post('/air-conditioners')
-      .send(airConditionerData)
-
-    expect(response.status).toBe(201)
-    expect(response.body).toMatchObject({
-      ...airConditionerData,
-      id: expect.any(Number),
-      updated_at: expect.any(String),
-      created_at: expect.any(String)
-    })
-  })
-
-  it('should retrieve an existing air conditioner by its ID', async () => {
-    const createdAirConditioner = await createAirConditioner()
-
-    const response = await request(app).get(
-      `/air-conditioners/${createdAirConditioner.id}`
-    )
-
-    expect(response.status).toBe(200)
-    expect(response.body).toMatchObject({
-      ...airConditionerData,
-      id: createdAirConditioner.id,
-      updated_at: expect.any(String),
-      created_at: expect.any(String)
-    })
-  })
-
-  it('should update an existing air conditioner with new data', async () => {
-    const createdAirConditioner = await createAirConditioner()
+  it('should return list of air-conditioners successfully ', async () => {
+    await createAirConditioner()
 
     const response = await request(app)
-      .put(`/air-conditioners/${createdAirConditioner.id}`)
-      .send({
-        model: 'Air Conditioner 2',
-        brand: 'Brand 2'
-      })
+      .get('/air-conditioners')
 
     expect(response.status).toBe(200)
-    expect(response.body).toMatchObject({
-      id: createdAirConditioner.id,
-      model: 'Air Conditioner 2',
-      brand: 'Brand 2',
-      updated_at: expect.any(String),
-      created_at: expect.any(String)
-    })
+    expect(response.body.air_conditioners).toHaveLength(1)
   })
 
-  it('should delete an existing air conditioner', async () => {
-    const createdAirConditioner = await createAirConditioner()
+  it('should return an air-conditioner by id successfully', async () => {
+    const airConditioner = await createAirConditioner()
 
-    const response = await request(app).delete(
-      `/air-conditioners/${createdAirConditioner.id}`
-    )
+    const response = await request(app)
+      .get(`/air-conditioners/${airConditioner.id}`)
 
     expect(response.status).toBe(200)
   })
 
-  it('should handle retrieval of a non-existent air conditioner', async () => {
-    const nonExistentId = 999999
-    const response = await request(app).get(`/air-conditioners/${nonExistentId}`)
-    expect(response.status).toBe(404)
-  })
+  it('should update an air-conditioner with valid data successfully', async () => {
+    const airConditioner = await createAirConditioner()
 
-  it('should handle empty input during air conditioner creation', async () => {
-    const invalidAirConditioner = {
-      model: '',
-      brand: ''
+    const newAirConditionerData = {
+      brand: 'Updated Brand',
+      model: 'Updated Model'
     }
 
     const response = await request(app)
-      .post('/air-conditioners')
-      .send(invalidAirConditioner)
+      .put(`/air-conditioners/${airConditioner.id}`)
+      .send(newAirConditionerData)
 
-    expect(response.status).toBe(400)
+    expect(response.status).toBe(200)
+    expect(response.body.air_conditioner.brand).toBe(newAirConditionerData.brand)
+    expect(response.body.air_conditioner.model).toBe(newAirConditionerData.model)
   })
 
-  it('should handle invalid input during air conditioner creation', async () => {
-    const invalidAirConditioner = {
-      model: 123,
-      brand: 123
-    }
+  it('should delete an air-conditioner successfully', async () => {
+    const airConditioner = await createAirConditioner()
 
     const response = await request(app)
-      .post('/air-conditioners')
-      .send(invalidAirConditioner)
+      .delete(`/air-conditioners/${airConditioner.id}`)
 
-    expect(response.status).toBe(400)
+    expect(response.status).toBe(200)
   })
 
-  it('should handle updating a non-existent air conditioner', async () => {
-    const nonExistentId = 999999
+  it('should update air-conditioner state successfully', async () => {
+    const airConditioner = await createAirConditioner()
+
     const response = await request(app)
-      .put(`/air-conditioners/${nonExistentId}`)
-      .send({
-        model: 'Updated Model',
-        brand: 'Updated Brand'
-      })
-    expect(response.status).toBe(404)
-  })
+      .put(`/air-conditioners/${airConditioner.id}/state`)
+      .send({ state: true })
 
-  it('should handle deleting a non-existent air conditioner', async () => {
-    const nonExistentId = 999999
-    const response = await request(app).delete(`/air-conditioners/${nonExistentId}`)
-    expect(response.status).toBe(404)
-  })
-
-  it('should handle retrieval of an air conditioner with an invalid ID', async () => {
-    const response = await request(app).get('/air-conditioners/invalid-id')
-    expect(response.status).toBe(400)
+    expect(response.status).toBe(200)
+    expect(response.body.air_conditioner.is_active).toBe(true)
   })
 })

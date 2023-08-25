@@ -1,41 +1,34 @@
 import express from 'express'
 import { AirConditionerController } from '../controllers'
-
 import { validateBodyRequest } from '../middlewares'
 import { PrismaAirConditionerRepository } from '../repositories'
 import {
-  createAirConditionerSchema,
-  updateAirConditionerSchema
+  updateAirConditionerSchema,
+  updateAirConditionerStateSchema
 } from '../schemas'
 import { AirConditionerService } from '../services'
 
 export const airConditionerRouter = express.Router()
 
-const prismaAirConditionerRepository = new PrismaAirConditionerRepository()
-const airConditionerService = new AirConditionerService(
-  prismaAirConditionerRepository
-)
-const airConditionerController = new AirConditionerController(
-  airConditionerService
-)
+const repository = new PrismaAirConditionerRepository()
+const service = new AirConditionerService(repository)
+const controller = new AirConditionerController(service)
 
 airConditionerRouter
-  .route('/')
-  .get(airConditionerController.getAllAirConditioners)
-  .post(
-    validateBodyRequest(createAirConditionerSchema),
-    airConditionerController.createAirConditioner
-  )
+  .route('/air-conditioners')
+  .get(controller.getAllAirConditioners)
 
 airConditionerRouter
-  .route('/:id')
-  .get(airConditionerController.getOneAirConditioner)
+  .route('/air-conditioners/:id')
+  .get(controller.getAirConditionerById)
   .put(
     validateBodyRequest(updateAirConditionerSchema),
-    airConditionerController.updateOneAirConditioner
+    controller.updateAirConditioner
   )
   .delete(
-    airConditionerController.deleteOneAirConditioner
+    controller.deleteAirConditioner
   )
 
-export default airConditionerRouter
+airConditionerRouter
+  .route('/air-conditioners/:id/state')
+  .put(validateBodyRequest(updateAirConditionerStateSchema), controller.updateAirConditionerState)

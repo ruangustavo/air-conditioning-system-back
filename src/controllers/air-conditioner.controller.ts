@@ -2,50 +2,31 @@ import { type Request, type Response } from 'express'
 import { type AirConditionerService } from '@/services'
 import { ResourceNotFound } from '@/errors'
 import { idSchema } from '@/schemas'
-import { ZodError } from 'zod'
-
-/**
- * This controller is responsible for handling the requests for the air-conditioners.
- * It is used by the routes to get the data from the services.
- */
 
 export class AirConditionerController {
   constructor (private readonly airConditionerService: AirConditionerService) {}
 
   getAllAirConditioners = async (_req: Request, res: Response) => {
-    const airConditioners = await this.airConditionerService.getAll()
-    res.json(airConditioners)
+    const airConditioners = await this.airConditionerService.getAllAirConditioners()
+    res.json({ air_conditioners: airConditioners })
   }
 
-  getOneAirConditioner = async (req: Request, res: Response) => {
-    try {
-      const { id } = idSchema.parse(req.params)
-      const airConditioner = await this.airConditionerService.getOne(id)
-      res.json(airConditioner)
-    } catch (error) {
-      if (error instanceof ResourceNotFound) {
-        res.status(404).json({ error: error.message })
-      } else if (error instanceof ZodError) {
-        res.status(400).json({ message: 'Validation error', error: error.format() })
-      }
+  getAirConditionerById = async (req: Request, res: Response) => {
+    const parsedParams = idSchema.safeParse(req.params)
+
+    if (!parsedParams.success) {
+      return res.status(400).json(
+        {
+          message: 'Validation error', error: parsedParams.error.format()
+        }
+      )
     }
-  }
 
-  createAirConditioner = async (req: Request, res: Response) => {
-    const airConditioner = req.validatedData
-    const newAirConditioner = await this.airConditionerService.create(
-      airConditioner
-    )
-    res.status(201).json(newAirConditioner)
-  }
-
-  updateOneAirConditioner = async (req: Request, res: Response) => {
-    const id = Number(req.params.id)
-    const airConditioner = req.validatedData
+    const { id } = parsedParams.data
 
     try {
-      const updatedAirConditioner = await this.airConditionerService.update(id, airConditioner)
-      res.json(updatedAirConditioner)
+      const airConditioner = await this.airConditionerService.getAirConditionerById(id)
+      res.json({ air_conditioner: airConditioner })
     } catch (error) {
       if (error instanceof ResourceNotFound) {
         res.status(404).json({ error: error.message })
@@ -53,12 +34,69 @@ export class AirConditionerController {
     }
   }
 
-  deleteOneAirConditioner = async (req: Request, res: Response) => {
-    const id = Number(req.params.id)
+  updateAirConditioner = async (req: Request, res: Response) => {
+    const parsedParams = idSchema.safeParse(req.params)
+
+    if (!parsedParams.success) {
+      return res.status(400).json(
+        {
+          message: 'Validation error', error: parsedParams.error.format()
+        }
+      )
+    }
+
+    const { id } = parsedParams.data
 
     try {
-      const deletedAirConditioner = await this.airConditionerService.delete(id)
-      res.json(deletedAirConditioner)
+      const updatedAirConditioner = await this.airConditionerService.updateAirConditioner(id, req.validatedData)
+      res.json({ air_conditioner: updatedAirConditioner })
+    } catch (error) {
+      if (error instanceof ResourceNotFound) {
+        res.status(404).json({ error: error.message })
+      }
+    }
+  }
+
+  deleteAirConditioner = async (req: Request, res: Response) => {
+    const parsedParams = idSchema.safeParse(req.params)
+
+    if (!parsedParams.success) {
+      return res.status(400).json(
+        {
+          message: 'Validation error', error: parsedParams.error.format()
+        }
+      )
+    }
+
+    const { id } = parsedParams.data
+
+    try {
+      const deletedAirConditioner = await this.airConditionerService.deleteAirConditioner(id)
+      res.json({ air_conditioner: deletedAirConditioner })
+    } catch (error) {
+      if (error instanceof ResourceNotFound) {
+        res.status(404).json({ error: error.message })
+      }
+    }
+  }
+
+  updateAirConditionerState = async (req: Request, res: Response) => {
+    const parsedParams = idSchema.safeParse(req.params)
+
+    if (!parsedParams.success) {
+      return res.status(400).json(
+        {
+          message: 'Validation error', error: parsedParams.error.format()
+        }
+      )
+    }
+
+    const { id } = parsedParams.data
+    const { state } = req.validatedData
+
+    try {
+      const updatedAirConditioner = await this.airConditionerService.updateAirConditionerState(id, state)
+      res.json({ air_conditioner: updatedAirConditioner })
     } catch (error) {
       if (error instanceof ResourceNotFound) {
         res.status(404).json({ error: error.message })

@@ -1,11 +1,11 @@
 import * as dotenv from 'dotenv'
-import server from './app'
+import { app } from './app'
 
 // Loading the environment variables
 dotenv.config()
 
 // Turning on the server
 const port = process.env.PORT ?? 3333
-server.listen(port, () => {
+app.listen(port, () => {
   console.log('Server is running!')
 })

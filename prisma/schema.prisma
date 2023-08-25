@@ -7,41 +7,43 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Room {
+  id               Int              @id @default(autoincrement())
+  name             String           @unique
+  description      String?
+  air_conditioners AirConditioner[]
+  updated_at       DateTime         @default(now())
+  created_at       DateTime         @default(now())
+  appointments     Appointment[]
+
+  @@map("rooms")
+}
+
 model AirConditioner {
-  id           Int           @id @default(autoincrement())
-  brand        String
-  model        String
-  state        State[]
-  appointments Appointment[]
-  updated_at   DateTime      @default(now())
-  created_at   DateTime      @default(now())
+  id         Int      @id @default(autoincrement())
+  brand      String
+  model      String
+  is_active  Boolean? @default(false)
+  room       Room     @relation(fields: [room_id], references: [id])
+  updated_at DateTime @default(now())
+  created_at DateTime @default(now())
+  room_id    Int
 
   @@map("air_conditioners")
 }
 
-model State {
-  id                 Int            @id @default(autoincrement())
-  state              Boolean
-  air_conditioner    AirConditioner @relation(fields: [air_conditioner_id], references: [id])
-  air_conditioner_id Int
-  updated_at         DateTime       @default(now())
-  created_at         DateTime       @default(now())
-
-  @@map("states")
-}
-
 model Appointment {
-  id                 Int            @id @default(autoincrement())
-  state              Boolean
-  start_day_of_week  Int
-  end_day_of_week    Int?
-  is_recurrent       Boolean        @default(false)
-  hour               Int
-  minute             Int
-  air_conditioner_id Int
-  air_conditioner    AirConditioner @relation(fields: [air_conditioner_id], references: [id])
-  updated_at         DateTime       @default(now())
-  created_at         DateTime       @default(now())
+  id                Int      @id @default(autoincrement())
+  state             Boolean
+  start_day_of_week Int
+  end_day_of_week   Int?
+  is_recurrent      Boolean  @default(false)
+  hour              Int
+  minute            Int
+  room              Room     @relation(fields: [room_id], references: [id])
+  room_id           Int
+  updated_at        DateTime @default(now())
+  created_at        DateTime @default(now())
 
   @@map("appointments")
 }

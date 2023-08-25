@@ -1,9 +1,5 @@
-import { type Appointment } from '@/models'
-import { type createAppointmentSchema } from '@/schemas/appointment.schema'
-import { type z } from 'zod'
-
-export type CreateAppointmentData = z.infer<typeof createAppointmentSchema>
+import { type Appointment, type Prisma } from '@prisma/client'
 
 export interface AppointmentRepository {
-  create: (airConditionerId: number, appointment: CreateAppointmentData) => Promise<Appointment>
+  createAppointment: (airConditionerId: number, appointment: Prisma.AppointmentCreateInput) => Promise<Appointment>
 }

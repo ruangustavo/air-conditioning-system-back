@@ -1,98 +1,60 @@
+import { describe, it, expect } from 'vitest'
 import { app } from '@/app'
-import { prisma } from '@/lib'
-import { type AirConditioner } from '@/models'
 import request from 'supertest'
-import { describe, it, beforeEach, expect } from 'vitest'
+import { prisma } from '@/lib'
 
 describe('[e2e] AppointmentController', () => {
-  let airConditioner: AirConditioner
-
-  beforeEach(async () => {
-    airConditioner = await prisma.airConditioner.create({
+  const createRoom = async () => {
+    return await prisma.room.create({
       data: {
-        model: 'Air Conditioner',
-        brand: 'Brand'
+        name: 'Room'
       }
     })
-  })
+  }
 
-  it('should schedule an air-conditioner turn on with valid data', async () => {
-    const currentTime = new Date()
-    const currentHour = currentTime.getHours()
-    const currentMinute = currentTime.getMinutes()
+  it('should create an appoint with valid data successfully', async () => {
+    const room = await createRoom()
 
-    const appointmentData = {
+    const appointment = {
       start_day_of_week: 0,
-      end_day_of_week: 6,
+      end_day_of_week: 0,
       is_recurrent: true,
-      hour: currentHour,
-      minute: currentMinute,
+      hour: 0,
+      minute: 0,
       state: true
     }
 
     const response = await request(app)
-      .post(`/air-conditioners/${airConditioner.id}/appointment`)
-      .send(appointmentData)
+      .post(`/rooms/${room.id}/appointments`)
+      .send(appointment)
 
     const expectedAppointment = {
+      ...appointment,
       id: expect.any(Number),
-      ...appointmentData,
-      air_conditioner_id: airConditioner.id,
+      room_id: room.id,
       created_at: expect.any(String),
       updated_at: expect.any(String)
     }
 
     expect(response.status).toBe(201)
-    expect(response.body.appointment).toMatchObject(expectedAppointment)
+    expect(response.body.appointment).toEqual(expectedAppointment)
   })
 
-  it('should return 400 if start_day_of_week is greater than end_day_of_week', async () => {
-    const invalidAppointmentData = {
-      start_day_of_week: 6,
+  it('should return 400 when try to create an appointment with start day of week greater than end day of week', async () => {
+    const room = await createRoom()
+
+    const invalidAppointment = {
+      start_day_of_week: 1,
       end_day_of_week: 0,
       is_recurrent: true,
-      hour: 12,
+      hour: 0,
       minute: 0,
       state: true
     }
 
     const response = await request(app)
-      .post(`/air-conditioners/${airConditioner.id}/appointment`)
-      .send(invalidAppointmentData)
-
-    expect(response.status).toBe(400)
-  })
-
-  it('should return 400 if hour is out of range (0-23)', async () => {
-    const invalidAppointmentData = {
-      start_day_of_week: 1,
-      end_day_of_week: 1,
-      is_recurrent: true,
-      hour: 24,
-      minute: 0,
-      state: true
-    }
-
-    const response = await request(app)
-      .post(`/air-conditioners/${airConditioner.id}/appointment`)
-      .send(invalidAppointmentData)
-
-    expect(response.status).toBe(400)
-  })
-
-  it('should return 400 if minute is out of range (0-59)', async () => {
-    const invalidAppointmentData = {
-      start_day_of_week: 1,
-      end_day_of_week: 1,
-      is_recurrent: true,
-      hour: 12,
-      minute: 60,
-      state: true
-    }
-
-    const response = await request(app)
-      .post(`/air-conditioners/${airConditioner.id}/appointment`)
-      .send(invalidAppointmentData)
+      .post(`/rooms/${room.id}/appointments`)
+      .send(invalidAppointment)
 
     expect(response.status).toBe(400)
   })

@@ -1,6 +1,7 @@
 import { type RoomRepository, type AppointmentRepository, type AirConditionerRepository } from '@/repositories'
 import * as scheduler from 'node-schedule'
 import { type Prisma } from '@prisma/client'
+import { ResourceNotFound } from '@/errors'
 
 const DEFAULT_TIMEZONE = 'America/Sao_Paulo'
 
@@ -12,6 +13,12 @@ export class AppointmentService {
   ) {}
 
   createAppointment = async (roomId: number, appointment: Prisma.AppointmentCreateInput) => {
+    const existingRoom = await this.roomRepository.getRoomById(roomId)
+
+    if (existingRoom === null) {
+      throw new ResourceNotFound()
+    }
+
     const createdAppointment = await this.appointmentRepository.createAppointment(roomId, appointment)
     const schedulingRule = this.getSchedulingRule(appointment)
 

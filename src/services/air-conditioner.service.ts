@@ -4,7 +4,7 @@ import { mqttClient } from '@/lib'
 
 const AIR_CONDITIONER_STATE_COMMANDS = {
   ON: '1',
-  OFF: '2'
+  OFF: '0'
 }
 
 export class AirConditionerService {

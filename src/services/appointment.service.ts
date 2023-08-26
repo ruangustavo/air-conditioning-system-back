@@ -2,8 +2,14 @@ import { type RoomRepository, type AppointmentRepository, type AirConditionerRep
 import * as scheduler from 'node-schedule'
 import { type Prisma } from '@prisma/client'
 import { ResourceNotFound } from '@/errors'
+import { mqttClient } from '@/lib'
 
 const DEFAULT_TIMEZONE = 'America/Sao_Paulo'
+
+const AIR_CONDITIONER_STATE_COMMANDS = {
+  ON: '1',
+  OFF: '0'
+}
 
 export class AppointmentService {
   constructor (
@@ -27,7 +33,11 @@ export class AppointmentService {
 
       for (const airConditioner of airConditioners) {
         await this.airConditionerRepository.updateAirConditionerState(airConditioner.id, appointment.state)
-        console.log(`Air conditioner ${airConditioner.id} updated to ${appointment.state ? 'on' : 'off'}`)
+
+        mqttClient.publish(
+          `air-conditioner/${airConditioner.id}/state`,
+          appointment.state ? AIR_CONDITIONER_STATE_COMMANDS.ON : AIR_CONDITIONER_STATE_COMMANDS.OFF
+        )
       }
     })
 

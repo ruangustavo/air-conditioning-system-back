@@ -12,6 +12,3 @@ export const createAppointmentSchema = z.object({
     ...data,
     end_day_of_week: data.end_day_of_week ?? data.start_day_of_week
   }))
-  .refine(data => data.start_day_of_week <= data.end_day_of_week, {
-    message: 'start_day_of_week must be less than or equal to end_day_of_week'
-  })

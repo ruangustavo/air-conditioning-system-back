@@ -39,23 +39,4 @@ describe('[e2e] AppointmentController', () => {
     expect(response.status).toBe(201)
     expect(response.body.appointment).toEqual(expectedAppointment)
   })
-
-  it('should return 400 when try to create an appointment with start day of week greater than end day of week', async () => {
-    const room = await createRoom()
-
-    const invalidAppointment = {
-      start_day_of_week: 1,
-      end_day_of_week: 0,
-      is_recurrent: true,
-      hour: 0,
-      minute: 0,
-      state: true
-    }
-
-    const response = await request(app)
-      .post(`/rooms/${room.id}/appointments`)
-      .send(invalidAppointment)
-
-    expect(response.status).toBe(400)
-  })
 })

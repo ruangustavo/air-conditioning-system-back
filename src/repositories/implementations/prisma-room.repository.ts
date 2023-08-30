@@ -6,7 +6,11 @@ export class PrismaRoomRepository implements RoomRepository {
   getRooms = async () => {
     const rooms = await prisma.room.findMany({
       include: {
-        air_conditioners: true
+        air_conditioners: {
+          orderBy: {
+            is_active: 'desc'
+          }
+        }
       }
     })
     return rooms

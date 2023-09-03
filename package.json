@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "lint": "eslint \"src/**/*.ts\" --fix",
     "start:dev": "tsx watch src/server.ts",
     "test": "vitest run",
     "test:watch": "vitest dev",
@@ -47,5 +48,11 @@
     "mqtt": "^5.0.0",
     "node-schedule": "^2.1.1",
     "zod": "^3.21.4"
+  },
+  "lint-staged": {
+    "*.ts": [
+      "npm run lint",
+      "npm run test -- related --passWithNoTests"
+    ]
   }
 }

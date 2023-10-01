@@ -1,3 +1,4 @@
+import { mqttClient } from '@/infra/mqtt/mqtt'
 import { type AirConditionerRepository } from '../../repositories/air-conditioner.repository'
 
 interface UpdateAirConditionerStateUsecaseRequest {
@@ -11,7 +12,12 @@ export class UpdateAirConditionerStateUsecase {
   ) {}
 
   async execute ({ id, state }: UpdateAirConditionerStateUsecaseRequest) {
-    const stateUpdated = await this.airConditionerRepository.updateStateById(id, state)
+    mqttClient.publish(`air-conditioner/${id}/state`, state ? '1' : '0')
+
+    const stateUpdated = await this.airConditionerRepository.updateStateById(
+      id, state
+    )
+
     return stateUpdated
   }
 }

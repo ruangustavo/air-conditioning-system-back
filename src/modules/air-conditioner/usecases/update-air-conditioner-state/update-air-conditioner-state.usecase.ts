@@ -12,7 +12,12 @@ export class UpdateAirConditionerStateUsecase {
   ) {}
 
   async execute ({ id, state }: UpdateAirConditionerStateUsecaseRequest) {
-    mqttClient.publish(`air-conditioner/${id}/state`, state ? '1' : '0')
+    const message = {
+      action: 'change-state',
+      state: state ? 'on' : 'off'
+    }
+
+    mqttClient.publish(`air-conditioners/${id}`, JSON.stringify(message))
 
     const stateUpdated = await this.airConditionerRepository.updateStateById(
       id, state

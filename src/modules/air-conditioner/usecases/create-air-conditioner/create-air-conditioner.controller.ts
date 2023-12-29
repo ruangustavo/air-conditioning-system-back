@@ -1,8 +1,8 @@
+import { type RoomRepository } from '@/modules/room/repositories/room.repository'
 import { type Request, type Response } from 'express'
 import { ZodError, z } from 'zod'
-import { CreateAirConditionerUsecase } from './create-air-conditioner.usecase'
 import { type AirConditionerRepository } from '../../repositories/air-conditioner.repository'
-import { type RoomRepository } from '@/modules/room/repositories/room.repository'
+import { CreateAirConditionerUsecase } from './create-air-conditioner.usecase'
 
 const createAirConditionerPathParamsSchema = z.object({
   roomId: z.coerce.number()

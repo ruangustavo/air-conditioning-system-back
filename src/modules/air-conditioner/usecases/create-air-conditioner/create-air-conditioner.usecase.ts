@@ -1,7 +1,7 @@
-import { type RoomRepository } from '@/modules/room/repositories/room.repository'
-import { type AirConditionerRepository } from '../../repositories/air-conditioner.repository'
 import { ResourceNotFoundError } from '@/errors/resource-not-found.error'
 import { mqttClient } from '@/infra/mqtt/mqtt'
+import { type RoomRepository } from '@/modules/room/repositories/room.repository'
+import { type AirConditionerRepository } from '../../repositories/air-conditioner.repository'
 
 interface CreateAirConditionerUsecaseRequest {
   roomId: number
@@ -24,9 +24,12 @@ export class CreateAirConditionerUsecase {
 
     const createdAirConditioner = await this.airConditionerRepository.save({ room_id: roomId, brand, model, protocol })
 
-    mqttClient.publish('air-conditioner/create', JSON.stringify({
-      id: createdAirConditioner.id,
-      protocol: createdAirConditioner.protocol
+    mqttClient.publish('air-conditioners/create', JSON.stringify({
+      action: 'create',
+      data: {
+        id: createdAirConditioner.id,
+        protocol: createdAirConditioner.protocol
+      }
     }))
 
     return createdAirConditioner

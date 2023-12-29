@@ -9,6 +9,7 @@ export class InMemoryAirConditionerRepository implements AirConditionerRepositor
       id: this.airConditioners.length + 1,
       ...airConditioner,
       is_active: false,
+      protocol: 'any_protocol',
       created_at: new Date(),
       updated_at: new Date()
     }

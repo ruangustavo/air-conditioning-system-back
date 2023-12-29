@@ -17,11 +17,12 @@ describe('CreateAirConditionerUsecase', () => {
 
   it('should create a new air-conditioner with valid data', async () => {
     const room = await roomRepository.save({ name: 'any_room_name' })
-    const expectedRoom = {
+    const expectedAirConditioner = {
       id: 1,
       room_id: room.id,
       brand: 'any_brand',
       model: 'any_model',
+      protocol: 'any_protocol',
       is_active: false,
       created_at: expect.any(Date),
       updated_at: expect.any(Date)
@@ -29,18 +30,18 @@ describe('CreateAirConditionerUsecase', () => {
 
     const createdAirConditioner = await sut.execute(
       {
-        roomId: room.id, brand: 'any_brand', model: 'any_model'
+        roomId: room.id, brand: 'any_brand', model: 'any_model', protocol: 'any_protocol'
       }
     )
 
-    expect(createdAirConditioner).toEqual(expectedRoom)
+    expect(createdAirConditioner).toEqual(expectedAirConditioner)
     expect(airConditionerRepository.airConditioners).toHaveLength(1)
   })
 
   it('should throw ResourceNotFoundError if room does not exist', async () => {
     const promise = sut.execute(
       {
-        roomId: 6, brand: 'any_brand', model: 'any_model'
+        roomId: 6, brand: 'any_brand', model: 'any_model', protocol: 'any_protocol'
       }
     )
 

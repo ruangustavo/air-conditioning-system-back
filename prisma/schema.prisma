@@ -24,6 +24,7 @@ model AirConditioner {
   brand      String
   model      String
   is_active  Boolean? @default(false)
+  protocol   String
   room       Room     @relation(fields: [room_id], references: [id])
   updated_at DateTime @default(now())
   created_at DateTime @default(now())

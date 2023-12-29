@@ -20,6 +20,7 @@ describe('UpdateAirConditionerStateUsecase', () => {
     const airConditioner = await airConditionerRepository.save({
       model: 'any_model',
       brand: 'any_brand',
+      protocol: 'any_protocol',
       room_id: room.id
     })
 
@@ -29,6 +30,7 @@ describe('UpdateAirConditionerStateUsecase', () => {
       id: airConditioner.id,
       model: 'any_model',
       brand: 'any_brand',
+      protocol: 'any_protocol',
       room_id: room.id,
       is_active: true,
       updated_at: expect.any(Date),

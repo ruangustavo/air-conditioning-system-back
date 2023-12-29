@@ -1,8 +1,8 @@
+import { type RoomRepository } from '@/modules/room/repositories/room.repository'
 import { type Request, type Response } from 'express'
 import { ZodError, z } from 'zod'
-import { CreateAirConditionerUsecase } from './create-air-conditioner.usecase'
 import { type AirConditionerRepository } from '../../repositories/air-conditioner.repository'
-import { type RoomRepository } from '@/modules/room/repositories/room.repository'
+import { CreateAirConditionerUsecase } from './create-air-conditioner.usecase'
 
 const createAirConditionerPathParamsSchema = z.object({
   roomId: z.coerce.number()
@@ -10,7 +10,8 @@ const createAirConditionerPathParamsSchema = z.object({
 
 const createAirConditionerSchema = z.object({
   brand: z.string().nonempty(),
-  model: z.string().nonempty()
+  model: z.string().nonempty(),
+  protocol: z.string().nonempty()
 })
 
 export class CreateAirConditionerController {
@@ -24,8 +25,8 @@ export class CreateAirConditionerController {
 
     try {
       const { roomId } = createAirConditionerPathParamsSchema.parse(req.params)
-      const { brand, model } = createAirConditionerSchema.parse(req.body)
-      const createdAirConditioner = await createAirConditionerUsecase.execute({ roomId, brand, model })
+      const { brand, model, protocol } = createAirConditionerSchema.parse(req.body)
+      const createdAirConditioner = await createAirConditionerUsecase.execute({ roomId, brand, model, protocol })
       return res.status(201).json({ air_conditioner: createdAirConditioner })
     } catch (error) {
       if (error instanceof ZodError) {

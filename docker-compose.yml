@@ -8,7 +8,6 @@ services:
       dockerfile: ./Dockerfile
     environment:
       NODE_ENV: production
-      DATABASE_URL: postgres://docker:docker@db:5432/scarc
     ports:
       - 3333:3333
     depends_on:
@@ -22,6 +21,11 @@ services:
       POSTGRESQL_DATABASE: scarc
     ports:
       - 5432:5432
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "docker" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   nginx:
     image: nginx

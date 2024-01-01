@@ -4,7 +4,9 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  // in docker environment the env variables aren't being set
+  // so we need to hardcode the values
+  url      = "postgres://docker:docker@db:5432/scarc"
 }
 
 model Room {

@@ -17,6 +17,7 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod --frozen-l
 # Build Stage
 FROM base AS build
 COPY prisma ./prisma/
+RUN pnpm dlx prisma generate
 RUN pnpm run build
 
 # Final Stage
@@ -24,4 +25,5 @@ FROM base
 COPY --from=prod-deps /app/node_modules /app/node_modules
 COPY --from=build /app/dist /app/dist
 
-CMD ["pnpm", "start"]
+# CMD instruction to run the script and execute commands
+CMD pnpm dlx prisma migrate deploy && pnpm start

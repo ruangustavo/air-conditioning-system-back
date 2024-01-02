@@ -31,15 +31,8 @@ services:
     image: nginx
     ports:
       - 80:80
+      - 443:443
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
     depends_on:
       - web
-
-  certbot-nginx:
-    image: certbot/certbot
-    volumes:
-      - ./certbot_data:/etc/letsencrypt
-    command: certbot --nginx --agree-tos --no-eff-email --staging -d ec2-18-216-194-23.us-east-2.compute.amazonaws.com
-    depends_on:
-      - nginx

@@ -40,6 +40,6 @@ services:
     image: certbot/certbot
     volumes:
       - ./certbot_data:/etc/letsencrypt
-    command: certbot --nginx --agree-tos --no-eff-email --staging -d ec2-3-141-170-64.us-east-2.compute.amazonaws.com
+    command: certbot --nginx --agree-tos --no-eff-email --staging -d ec2-18-216-194-23.us-east-2.compute.amazonaws.com
     depends_on:
       - nginx
